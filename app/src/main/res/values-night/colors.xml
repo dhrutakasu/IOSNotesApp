@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#ffe9e9e9</color>
+    <color name="purple_500">#ffe9e9e9</color>
+    <color name="purple_700">#ffe9e9e9</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="app_color_bag">#262833</color>
+    <color name="app_text_subtitle_color">#e8e8e8</color>
+    <color name="app_text_title_color">#ffffff</color>
+    <color name="ios_sys_blue">#0a84ff</color>
+    <color name="ios_sys_indigo">#5e5ce6</color>
+    <color name="ios_sys_label">#ffffff</color>
+    <color name="ios_sys_orange">#ff9f0a</color>
+    <color name="ios_sys_pink">#ff373b</color>
+    <color name="ios_sys_red">#ff443a</color>
+    <color name="ios_sys_second_label">#98989f</color>
+</resources>

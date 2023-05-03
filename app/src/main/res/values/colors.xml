@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#ffe9e9e9</color>
+    <color name="purple_500">#ffe9e9e9</color>
+    <color name="purple_700">#ffe9e9e9</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+
+    <color name="app_icon_color">#ffa725</color>
+    <color name="app_bg_color">#b3cdcdcd</color>
+    <color name="line_separate_color">#40bdb4b4</color>
+    <color name="app_color_bag">#f2f2f7</color>
+    <color name="ios_blue">#ff037bff</color>
+    <color name="ios_sys_pink">#ff2d55</color>
+    <color name="ios_bg">#ffe9e9e9</color>
+    <color name="ios_grey">#ffc6c6c6</color>
+    <color name="ios_sys_blue">#007bff</color>
+    <color name="separator_color">#66babab8</color>
+    <color name="app_text_subtitle_color">#939393</color>
+    <color name="app_text_title_color">#000000</color>
+    <color name="ios_gray_line">#66c6c6c6</color>
+    <color name="ios_sys_second_label">#8a8a8e</color>
+    <color name="ios_sys_label">#000000</color>
+    <color name="title_color_hint">#939393</color>
+    <color name="ios_sys_indigo">#5856d6</color>
+    <color name="ios_sys_red">#ff3a30</color>
+    <color name="ios_sys_orange">#ff9500</color>
+</resources>
