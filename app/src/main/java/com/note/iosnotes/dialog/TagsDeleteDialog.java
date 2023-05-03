@@ -8,14 +8,13 @@ import android.widget.TextView;
 
 import com.note.iosnotes.R;
 
-public class DeleteTagsDialog extends Dialog {
+public class TagsDeleteDialog extends Dialog {
     private DeleteTagListeners deleteTagListeners;
-
     public interface DeleteTagListeners {
         void SetonDeleteTag();
     }
 
-    public DeleteTagsDialog(Context context, DeleteTagListeners deleteTagListeners2) {
+    public TagsDeleteDialog(Context context, DeleteTagListeners deleteTagListeners2) {
         super(context);
         this.deleteTagListeners = deleteTagListeners2;
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));

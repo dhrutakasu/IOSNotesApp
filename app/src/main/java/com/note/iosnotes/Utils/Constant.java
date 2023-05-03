@@ -15,11 +15,8 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import androidx.core.app.ActivityCompat;
-
 import com.note.iosnotes.Model.Note;
 import com.note.iosnotes.R;
-import com.note.iosnotes.ui.Activity.ActivityNewCreateNotes;
 
 import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
@@ -27,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import androidx.core.app.ActivityCompat;
 
 public class Constant {
     public static final String PASSWORD = "PASSWORD";
@@ -50,6 +49,10 @@ public class Constant {
 
     public static final int IMG_REL_MAX_HEIGHT = 1280;
     public static final int IMG_REL_MAX_WIDTH = 720;
+    public static String WIDGET_NOTE_TITLE = "WIDGET_NOTE_TITLE";
+    public static String WIDGET_NOTE_ID = "WIDGET_NOTE_ID";
+    public static String WIDGET_NOTE_CONTENT = "WIDGET_NOTE_CONTENT";
+    public static String WIDGET_TEXT_COLOR = Constant.WIDGET_TEXT_COLOR;
 
     public static String getTimeAgo(Date date) {
         long timeInMillis = Calendar.getInstance().getTimeInMillis() - date.getTime();
@@ -129,7 +132,7 @@ public class Constant {
         return null;
     }
 
-    public static boolean checkPer(Context context, String str) {
+    public static boolean checkPermission(Context context, String str) {
         return ActivityCompat.checkSelfPermission(context, str) == 0;
     }
 

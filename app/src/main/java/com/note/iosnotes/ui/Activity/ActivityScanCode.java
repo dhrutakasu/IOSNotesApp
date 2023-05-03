@@ -18,7 +18,7 @@ import com.budiyev.android.codescanner.DecodeCallback;
 import com.google.zxing.Result;
 import com.note.iosnotes.R;
 import com.note.iosnotes.Utils.Constant;
-import com.note.iosnotes.dialog.ScanResultDialog;
+import com.note.iosnotes.dialog.AddScanResultDialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -58,15 +58,15 @@ public class ActivityScanCode extends AppCompatActivity {
     }
 
     public void showDialogScanResult(final String str) {
-        ScanResultDialog scanResultDialog = new ScanResultDialog(this, str, new ScanResultDialog.IScanResult() {
-            public void copyResultToNote() {
+        AddScanResultDialog scanResultDialog = new AddScanResultDialog(this, str, new AddScanResultDialog.SetScanResult() {
+            public void ResultCopyToNote() {
                 Intent intent = new Intent();
                 intent.putExtra(Constant.SCAN_RESULT, str);
                 ActivityScanCode.this.setResult(-1, intent);
                 ActivityScanCode.this.onBackPressed();
             }
 
-            public void onCancelResult() {
+            public void onResultCancel() {
                 ActivityScanCode.this.mCodeScanner.startPreview();
             }
         });

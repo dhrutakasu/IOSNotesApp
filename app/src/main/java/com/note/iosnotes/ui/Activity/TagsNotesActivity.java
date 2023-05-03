@@ -27,7 +27,7 @@ import com.note.iosnotes.R;
 import com.note.iosnotes.Utils.Constant;
 import com.note.iosnotes.Utils.TinyDB;
 import com.note.iosnotes.dialog.AddNewTagDialog;
-import com.note.iosnotes.dialog.ChooseTagDialog;
+import com.note.iosnotes.dialog.ChooseCreatedTagDialog;
 import com.note.iosnotes.dialog.SettingPasswordDialog;
 import com.note.iosnotes.ui.Adapter.NotesAdapter;
 
@@ -385,16 +385,16 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void showListTagToMove(final ArrayList<Tags> realmResults, final ArrayList<Note> realmList) {
-        new ChooseTagDialog(this, new ChooseTagDialog.IListTag() {
+        new ChooseCreatedTagDialog(this, new ChooseCreatedTagDialog.setListTag() {
             public Tags getTag(int i) {
                 return (Tags) realmResults.get(i);
             }
 
-            public int getTagsCount() {
+            public int getTagsSize() {
                 return realmResults.size();
             }
 
-            public void onTagSelected(int i) {
+            public void onTagSelectedPosition(int i) {
                 System.out.println("----- ii : " + i);
                 final Tags tag = (Tags) helper.getTagsRecord(i);
 //                mRealm.executeTransaction(new Realm.Transaction() {

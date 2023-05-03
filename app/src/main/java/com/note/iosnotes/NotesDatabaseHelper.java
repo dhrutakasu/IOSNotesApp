@@ -14,7 +14,6 @@ import com.note.iosnotes.Model.Tags;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 
 import androidx.annotation.Nullable;
 
@@ -891,6 +890,15 @@ public class NotesDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(NOTES_FOLDERID, note.getFolderId());
         contentValues.put(NOTES_PIN_ORDER, note.getPinOrder());
         contentValues.put(NOTES_IMAGE_ORIENT_CODE, note.getImgOrientCode());
+        contentValues.put(NOTES_TEXT_TITLE_BOLD, note.isTitleBold());
+        contentValues.put(NOTES_TEXT_TITLE_ITALIC, note.isTitleItalic());
+        contentValues.put(NOTES_TEXT_TITLE_UNDERLINE, note.isTitleUnderline());
+        contentValues.put(NOTES_TEXT_TITLE_STRIKE, note.isTitleStrike());
+        contentValues.put(NOTES_TEXT_CONTENT_BOLD, note.isContentBold());
+        contentValues.put(NOTES_TEXT_CONTENT_ITALIC, note.isContentUnderline());
+        contentValues.put(NOTES_TEXT_CONTENT_UNDERLINE, note.isContentUnderline());
+        contentValues.put(NOTES_TEXT_CONTENT_STRIKE, note.isContentStrike());
+        contentValues.put(NOTES_TEXT_ALIGN, note.getAlign());
         db.update(NOTES_TABLE_NAME, contentValues, NOTES_ID + " = ?", new String[]{String.valueOf(note.getId())});
         return true;
     }
@@ -911,6 +919,15 @@ public class NotesDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(NOTES_FOLDERID, note.getFolderId());
         contentValues.put(NOTES_PIN_ORDER, note.getPinOrder());
         contentValues.put(NOTES_IMAGE_ORIENT_CODE, note.getImgOrientCode());
+        contentValues.put(NOTES_TEXT_TITLE_BOLD, note.isTitleBold());
+        contentValues.put(NOTES_TEXT_TITLE_ITALIC, note.isTitleItalic());
+        contentValues.put(NOTES_TEXT_TITLE_UNDERLINE, note.isTitleUnderline());
+        contentValues.put(NOTES_TEXT_TITLE_STRIKE, note.isTitleStrike());
+        contentValues.put(NOTES_TEXT_CONTENT_BOLD, note.isContentBold());
+        contentValues.put(NOTES_TEXT_CONTENT_ITALIC, note.isContentUnderline());
+        contentValues.put(NOTES_TEXT_CONTENT_UNDERLINE, note.isContentUnderline());
+        contentValues.put(NOTES_TEXT_CONTENT_STRIKE, note.isContentStrike());
+        contentValues.put(NOTES_TEXT_ALIGN, note.getAlign());
         db.update(NOTES_TABLE_NAME, contentValues, NOTES_TAGS_ID + " = ? AND " + NOTES_ID + " = ?", new String[]{String.valueOf(id), String.valueOf(noteId)});
         return true;
     }

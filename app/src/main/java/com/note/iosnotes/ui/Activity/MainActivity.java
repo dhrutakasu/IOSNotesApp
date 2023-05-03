@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -16,20 +15,16 @@ import android.widget.Toast;
 
 import com.ligl.android.widget.iosdialog.IOSSheetDialog;
 import com.note.iosnotes.Model.NewTagColor;
-import com.note.iosnotes.Model.Note;
 import com.note.iosnotes.Model.Tags;
 import com.note.iosnotes.NotesDatabaseHelper;
 import com.note.iosnotes.R;
 import com.note.iosnotes.Utils.Constant;
-import com.note.iosnotes.Utils.TinyDB;
 import com.note.iosnotes.dialog.AddNewTagDialog;
-import com.note.iosnotes.dialog.DeleteTagsDialog;
 import com.note.iosnotes.dialog.NewTagColorCodeDialog;
+import com.note.iosnotes.dialog.TagsDeleteDialog;
 import com.note.iosnotes.ui.Adapter.NewTagAdapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -50,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TAG_ACTION mTagAction;
     private AddNewTagDialog addNewTagDialog;
     private NewTagColorCodeDialog newTagColorCodeDialog;
-    private DeleteTagsDialog deleteTagsDialog;
+    private TagsDeleteDialog deleteTagsDialog;
     private boolean isEditModeEnabled = false;
     private NewTagAdapter newTagAdapter;
     private List<NewTagColor> listNewTagColor;
@@ -156,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void showDialogDeleteTag(int id, int pos) {
-        DeleteTagsDialog deleteTagsDialog = new DeleteTagsDialog(context, () -> {
+        TagsDeleteDialog deleteTagsDialog = new TagsDeleteDialog(context, () -> {
             //todo delete
             deleteTag(id, pos);
         });

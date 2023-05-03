@@ -19,8 +19,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -47,12 +45,13 @@ import com.note.iosnotes.Model.Note;
 import com.note.iosnotes.Model.Tags;
 import com.note.iosnotes.NotesDatabaseHelper;
 import com.note.iosnotes.R;
-import com.note.iosnotes.Utils.BottomMenu;
+import com.note.iosnotes.Utils.BottomTextMenu;
+import com.note.iosnotes.Utils.BottomView;
 import com.note.iosnotes.Utils.Constant;
 import com.note.iosnotes.Utils.TinyDB;
 import com.note.iosnotes.dialog.AddNewTagDialog;
-import com.note.iosnotes.dialog.ChooseTagDialog;
-import com.note.iosnotes.dialog.DeleteNoteDialog;
+import com.note.iosnotes.dialog.ChooseCreatedTagDialog;
+import com.note.iosnotes.dialog.NoteDeleteDialog;
 import com.note.iosnotes.dialog.SettingPasswordDialog;
 import com.note.iosnotes.provider.NoteWidgetCreatedReceiver;
 import com.note.iosnotes.provider.NoteWidgetProvider;
@@ -63,7 +62,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -127,7 +125,7 @@ public class ActivityNewCreateNotes extends AppCompatActivity implements View.On
     public int returnResult;
     private String mPhotoTakenPath = null;
     private CAMERA_ACTION cameraAction;
-    private DeleteNoteDialog deleteNoteDialog;
+    private NoteDeleteDialog deleteNoteDialog;
     private boolean isInserted = false;
     private int count;
 
@@ -551,7 +549,7 @@ public class ActivityNewCreateNotes extends AppCompatActivity implements View.On
         if (dateModified == null) {
             dateModified = Calendar.getInstance().getTime();
         }
-        new BottomMenu(getSupportFragmentManager(), str, Constant.getTimeAgo(dateModified), isPinned, isLocked, imgByteArr, imgOrientCode, titleBold, titleItalic, titleUnderline, titleStrike, contentBold, contentItalic, contentUnderline, contentStrike, align, new BottomMenu.IBottomMenu() {
+        new BottomView(getSupportFragmentManager(), str, Constant.getTimeAgo(dateModified), isPinned, isLocked, imgByteArr, imgOrientCode, titleBold, titleItalic, titleUnderline, titleStrike, contentBold, contentItalic, contentUnderline, contentStrike, align, new BottomView.IBottomMenu() {
             public void onDeleteNote() {
                 showConfirmDialogDeleteNote();
             }
@@ -706,16 +704,16 @@ public class ActivityNewCreateNotes extends AppCompatActivity implements View.On
     }
 
     public void showListTagToMove(final ArrayList<Tags> realmResults) {
-        ChooseTagDialog chooseTagDialog = new ChooseTagDialog(this, new ChooseTagDialog.IListTag() {
+        ChooseCreatedTagDialog chooseTagDialog = new ChooseCreatedTagDialog(this, new ChooseCreatedTagDialog.setListTag() {
             public Tags getTag(int i) {
                 return (Tags) realmResults.get(i);
             }
 
-            public int getTagsCount() {
+            public int getTagsSize() {
                 return realmResults.size();
             }
 
-            public void onTagSelected(int i) {
+            public void onTagSelectedPosition(int i) {
                 System.out.println("---- List folderId : " + realmResults);
                 final Tags tag = (Tags) noteHelper.getTagsRecord(i);
 //                mRealm.executeTransaction(new Realm.Transaction() {
@@ -800,8 +798,8 @@ public class ActivityNewCreateNotes extends AppCompatActivity implements View.On
             str2 = getResources().getString(R.string.discard_note);
             str = getResources().getString(R.string.discard_button);
         }
-        DeleteNoteDialog deleteNoteDialog = new DeleteNoteDialog(this, str2, str3, str, new DeleteNoteDialog.IDeleteNote() {
-            public void onDeleteNote() {
+        NoteDeleteDialog deleteNoteDialog = new NoteDeleteDialog(this, str2, str3, str, new NoteDeleteDialog.setDeleteNote() {
+            public void onSetDeleteNote() {
                 if (noteAction == 0) {
                     finish();
                     return;
@@ -872,8 +870,8 @@ public class ActivityNewCreateNotes extends AppCompatActivity implements View.On
     }
 
     public void actionTakePhoto() {
-        boolean checkPer = Constant.checkPer(this, "android.permission.CAMERA");
-        boolean checkPer2 = Constant.checkPer(this, "android.permission.WRITE_EXTERNAL_STORAGE");
+        boolean checkPer = Constant.checkPermission(this, "android.permission.CAMERA");
+        boolean checkPer2 = Constant.checkPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE");
         if (checkPer && checkPer2) {
             takePhoto();
         } else if (!checkPer && checkPer2) {
@@ -886,7 +884,7 @@ public class ActivityNewCreateNotes extends AppCompatActivity implements View.On
     }
 
     public void actionPickPhoto() {
-        if (Constant.checkPer(this, "android.permission.WRITE_EXTERNAL_STORAGE")) {
+        if (Constant.checkPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE")) {
             selectImage();
         } else {
             ActivityCompat.requestPermissions(this, new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"}, 100);
@@ -1098,8 +1096,8 @@ public class ActivityNewCreateNotes extends AppCompatActivity implements View.On
     }
 
     private void showDialogDeleteImage() {
-        DeleteNoteDialog deleteNoteDialog = new DeleteNoteDialog(this, getResources().getString(R.string.delete_photo), getResources().getString(R.string.confirm_delete_image), getResources().getString(R.string.delete_button), new DeleteNoteDialog.IDeleteNote() {
-            public void onDeleteNote() {
+        NoteDeleteDialog deleteNoteDialog = new NoteDeleteDialog(this, getResources().getString(R.string.delete_photo), getResources().getString(R.string.confirm_delete_image), getResources().getString(R.string.delete_button), new NoteDeleteDialog.setDeleteNote() {
+            public void onSetDeleteNote() {
                 imgByteArr = null;
                 imgOrientCode = 0;
                 IvAttach.setImageDrawable((Drawable) null);
