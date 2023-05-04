@@ -21,17 +21,11 @@ public class Pref {
         return preferences.getString(str, "");
     }
 
-    public void putString(String str, String str2) {
-        checkNullKey(str);
-        checkNullValue(str2);
-        preferences.edit().putString(str, str2).apply();
+    public void putString(String key, String value) {
+        preferences.edit().putString(key, value).apply();
     }
 
-    public void checkNullKey(String str) {
-        Objects.requireNonNull(str);
-    }
-
-    public void checkNullValue(String str) {
-        Objects.requireNonNull(str);
+    public void putInt(String key, int value) {
+        preferences.edit().putInt(key, value).apply();
     }
 }

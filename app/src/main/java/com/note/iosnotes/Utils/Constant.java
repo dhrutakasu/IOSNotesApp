@@ -36,6 +36,7 @@ public class Constant {
     private static final long LONG_DAY_MILLIS = 86400000;
     public static final String FORMAT_HOUR_AGO = "hh:mm a";
     public static final String FORMAT_DAY_AGO = "dd/MM/yyyy";
+    public static final String STR_TEXT_SIZE = "Str_Text_Size";
 
     public static final int BITMAP_ROTATION_180 = 180;
     public static final int BITMAP_ROTATION_270 = 270;

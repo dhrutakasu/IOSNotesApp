@@ -2,9 +2,12 @@ package com.note.iosnotes.Utils;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,16 +21,18 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.BaseRequestOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.note.iosnotes.R;
+import com.note.iosnotes.dialog.NotesTextSizeDialog;
 
 public class BottomView extends RoundedBottomDialogFragment {
     private final FragmentManager manager;
     private String date;
-    private IBottomMenu iBottomMenu;
+    private setBottomMenu setBottomMenu;
     private byte[] imgByteArr;
     private int imgOrientCode;
     private boolean isLock;
     private boolean isPin;
     private int count;
+    private int textSize;
     private boolean titleBold;
     private boolean titleItalic;
     private boolean titleUnderline;
@@ -43,7 +48,7 @@ public class BottomView extends RoundedBottomDialogFragment {
     private TextView TvNotePinBottomView;
     private TextView tvNoteTitleBottomView;
 
-    public interface IBottomMenu {
+    public interface setBottomMenu {
         void onCreateWidget();
 
         void onDeleteNote();
@@ -57,6 +62,7 @@ public class BottomView extends RoundedBottomDialogFragment {
         void onScanNote();
 
         void onShareNote();
+        void onTextSize(int size);
 
         void onTitleNote(boolean IsBold, boolean IsItalic, boolean IsUnderline, boolean IsStrike);
 
@@ -65,13 +71,13 @@ public class BottomView extends RoundedBottomDialogFragment {
         void onAlignNote(int pos);
     }
 
-    public BottomView(FragmentManager manager, String title, String date, boolean isPin, boolean isLock, byte[] bytes, int imageOrientCOde, int count, boolean titleBold, boolean titleItalic, boolean titleUnderline, boolean titleStrike, boolean contentBold, boolean contentItalic, boolean contentUnderline, boolean contentStrike, int align, IBottomMenu Menu) {
+    public BottomView(FragmentManager manager, String title, String date, boolean isPin, boolean isLock, byte[] bytes, int imageOrientCOde, int count, boolean titleBold, boolean titleItalic, boolean titleUnderline, boolean titleStrike, boolean contentBold, boolean contentItalic, boolean contentUnderline, boolean contentStrike, int align, setBottomMenu Menu) {
         this.manager = manager;
         this.title = title;
         this.date = date;
         this.isPin = isPin;
         this.isLock = isLock;
-        this.iBottomMenu = Menu;
+        this.setBottomMenu = Menu;
         this.imgByteArr = bytes;
         this.imgOrientCode = imageOrientCOde;
         this.count = count;
@@ -113,11 +119,19 @@ public class BottomView extends RoundedBottomDialogFragment {
         RelativeLayout RlActionFontStyle = (RelativeLayout) view.findViewById(R.id.RlActionFontStyle);
         TextView TvCount = (TextView) view.findViewById(R.id.TvCount);
         TextView TvAlignment = (TextView) view.findViewById(R.id.TvAlignment);
+        TextView TvSize = (TextView) view.findViewById(R.id.TvSize);
+        RelativeLayout RlActionTextSize = (RelativeLayout) view.findViewById(R.id.RlActionTextSize);
         TvCount.setText(count + "");
+        String size= new Pref(getContext()).getInt(Constant.STR_TEXT_SIZE)+"%";
+        if (size.equalsIgnoreCase("0%")){
+            TvSize.setText("100%");
+        }else {
+            TvSize.setText(size);
+        }
         ((RelativeLayout) view.findViewById(R.id.RlActionCreateWidget)).setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 dismiss();
-                iBottomMenu.onCreateWidget();
+                setBottomMenu.onCreateWidget();
             }
         });
         if (this.isPin) {
@@ -143,6 +157,13 @@ public class BottomView extends RoundedBottomDialogFragment {
             Glide.with((View) IvAttachThumbnailBottomView).load(bitmap).apply((BaseRequestOptions<?>) new RequestOptions().override(200, 200)).apply((BaseRequestOptions<?>) RequestOptions.bitmapTransform(new RoundedCorners(24))).into(IvAttachThumbnailBottomView);
             IvAttachThumbnailBottomView.setVisibility(View.VISIBLE);
         }
+        if (align==1){
+            TvAlignment.setText("Left");
+        }else if (align==2){
+            TvAlignment.setText("Center");
+        }else if (align==3){
+            TvAlignment.setText("Right");
+        }
         BtnCloseBottomView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 dismiss();
@@ -151,49 +172,73 @@ public class BottomView extends RoundedBottomDialogFragment {
         LlActionPin.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 dismiss();
-                iBottomMenu.onPinNote();
+                setBottomMenu.onPinNote();
             }
         });
         LlActionLock.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 dismiss();
-                iBottomMenu.onLockNote();
+                setBottomMenu.onLockNote();
             }
         });
         LlActionScan.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 dismiss();
-                iBottomMenu.onScanNote();
+                setBottomMenu.onScanNote();
             }
         });
         LlActionDelete.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 dismiss();
-                iBottomMenu.onDeleteNote();
+                setBottomMenu.onDeleteNote();
             }
         });
         RlActionMoveNote.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 dismiss();
-                iBottomMenu.onMoveNote();
+                setBottomMenu.onMoveNote();
+            }
+        });
+        RlActionTextSize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NotesTextSizeDialog notesTextSizeDialog=new NotesTextSizeDialog(getContext(), new NotesTextSizeDialog.TextSizeListeners() {
+                    @Override
+                    public void setTextSize(int sizef) {
+                        int size= new Pref(getContext()).getInt(Constant.STR_TEXT_SIZE);
+                        setBottomMenu.onTextSize(size);
+                    }
+                });
+                notesTextSizeDialog.show();
+
+
+                WindowManager.LayoutParams lp = notesTextSizeDialog.getWindow().getAttributes();
+                Window window = notesTextSizeDialog.getWindow();
+                lp.copyFrom(window.getAttributes());
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                window.setAttributes(lp);
+                lp.gravity = Gravity.CENTER;
+                notesTextSizeDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             }
         });
         RlActionFontStyle.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                dismiss();
                 new BottomTextMenu(titleBold, titleItalic, titleUnderline, titleStrike, contentBold, contentItalic, contentUnderline, contentStrike, align, new BottomTextMenu.setBottomTextMenu() {
                     @Override
                     public void onTitle(boolean IsBold, boolean IsItalic, boolean IsUnderline, boolean IsStrike) {
-                        iBottomMenu.onTitleNote(IsBold, IsItalic, IsUnderline, IsStrike);
+                        setBottomMenu.onTitleNote(IsBold, IsItalic, IsUnderline, IsStrike);
                     }
 
                     @Override
                     public void onContent(boolean IsBold, boolean IsItalic, boolean IsUnderline, boolean IsStrike) {
-                        iBottomMenu.onContentNote(IsBold, IsItalic, IsUnderline, IsStrike);
+                        setBottomMenu.onContentNote(IsBold, IsItalic, IsUnderline, IsStrike);
                     }
 
                     @Override
                     public void onAlign(int pos) {
-                        iBottomMenu.onAlignNote(pos);
+                        setBottomMenu.onAlignNote(pos);
                         if (pos==1){
                             TvAlignment.setText("Left");
                         }else if (pos==2){
@@ -208,7 +253,7 @@ public class BottomView extends RoundedBottomDialogFragment {
         RlActionShareNote.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 dismiss();
-                iBottomMenu.onShareNote();
+                setBottomMenu.onShareNote();
             }
         });
     }
