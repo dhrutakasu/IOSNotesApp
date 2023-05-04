@@ -20,8 +20,8 @@ import com.note.iosnotes.NotesDatabaseHelper;
 import com.note.iosnotes.R;
 import com.note.iosnotes.Utils.Constant;
 import com.note.iosnotes.dialog.AddNewTagDialog;
-import com.note.iosnotes.dialog.NewTagColorCodeDialog;
 import com.note.iosnotes.dialog.TagsDeleteDialog;
+import com.note.iosnotes.dialog.NewTagColorCodeDialog;
 import com.note.iosnotes.ui.Adapter.NewTagAdapter;
 
 import java.util.ArrayList;
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     AdapTagId = tags.getId();
                     System.out.println("------ IDD : " + tags.toString() + " pos : " + position);
                     startActivityForResult(new Intent(context, TagsNotesActivity.class)
-                            .putExtra(Constant.FOLDER_ID, position)
+                            .putExtra(Constant.TAG_FOLDER_ID, position)
                             .putExtra(Constant.TAGS_ID, tags.getId())
                             .putExtra(Constant.TAGS_COLOR_CODE, tags.getColorCodeId())
                             .putExtra(Constant.TAGS_NAME, tags.getTagName()), VIEW_TAGS_REQUEST);

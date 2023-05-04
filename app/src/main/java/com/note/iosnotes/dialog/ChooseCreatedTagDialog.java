@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.note.iosnotes.Model.Tags;
-import com.note.iosnotes.R;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.note.iosnotes.Model.Tags;
+import com.note.iosnotes.R;
 
 public class ChooseCreatedTagDialog extends Dialog {
     public setListTag listTag;
@@ -31,8 +31,8 @@ public class ChooseCreatedTagDialog extends Dialog {
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(R.layout.dialog_new_tag_change_color);
-        RecyclerView RvTagList = (RecyclerView) findViewById(R.id.RvTagColor);
+        setContentView(R.layout.dialog_list_of_tag);
+        RecyclerView RvTagList = (RecyclerView) findViewById(R.id.RvTagList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         TagFoldersAdapter folderAdapter = new TagFoldersAdapter();
         RvTagList.setLayoutManager(layoutManager);
@@ -41,11 +41,11 @@ public class ChooseCreatedTagDialog extends Dialog {
 
     public class TagFoldersAdapter extends RecyclerView.Adapter<TagFoldersAdapter.MyViewHolder> {
 
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag_color_item, parent, false));
+        public TagFoldersAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new TagFoldersAdapter.MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag_color_item, parent, false));
         }
 
-        public void onBindViewHolder(MyViewHolder holder, int i) {
+        public void onBindViewHolder(TagFoldersAdapter.MyViewHolder holder, int i) {
             Tags tags= listTag.getTag(i);
             holder.IvTagColorCode.setImageResource(getTagColor(tags.getColorCodeId()));
             holder.TvTagColorName.setText(tags.getTagName());

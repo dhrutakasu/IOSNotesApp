@@ -74,7 +74,6 @@ public class NewTagAdapter extends RecyclerView.Adapter<NewTagAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Tags tags = tagArray.get(position);
-        System.out.println("------ TAGGGG : " + tags.toString());
         holder.TvTagName.setText(tags.getTagName());
         holder.IvTagColorIcon.setImageResource(NewTagAdapter.getTagColorCode(tags.getColorCodeId()));
         holder.TvTagNumberNotes.setText(tags.getCounterNote() + "");

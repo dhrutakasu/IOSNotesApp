@@ -8,15 +8,15 @@ public class Note {
     private int tagId;
     private String noteTitle;
     private String noteContent;
-    private Date dateModified;
-    private byte[] imgByteArr;
-    private boolean isDeleted;
-    private boolean isLocked;
-    private boolean isPinned;
-    private int widgetId;
-    private int folderId;
-    private int pinOrder;
-    private int imgOrientCode;
+    private Date dateTimeMills;
+    private byte[] imgByteFormat;
+    private boolean isDeletedOrNot;
+    private boolean isLockedOrNot;
+    private boolean isPinnedOrNot;
+    private int createWidgetId;
+    private int TagFolderId;
+    private int intPinOrder;
+    private int imgOrientionCode;
 
     private boolean titleBold;
     private boolean titleItalic;
@@ -33,15 +33,15 @@ public class Note {
         this.tagId = tagId;
         this.noteTitle = noteTitle;
         this.noteContent = noteContent;
-        this.dateModified = dateModified;
-        this.imgByteArr = imgByteArr;
-        this.isDeleted = isDeleted;
-        this.isLocked = isLocked;
-        this.isPinned = isPinned;
-        this.widgetId = widgetId;
-        this.folderId = folderId;
-        this.pinOrder = pinOrder;
-        this.imgOrientCode = imgOrientCode;
+        this.dateTimeMills = dateModified;
+        this.imgByteFormat = imgByteArr;
+        this.isDeletedOrNot = isDeleted;
+        this.isLockedOrNot = isLocked;
+        this.isPinnedOrNot = isPinned;
+        this.createWidgetId = widgetId;
+        this.TagFolderId = folderId;
+        this.intPinOrder = pinOrder;
+        this.imgOrientionCode = imgOrientCode;
         this.titleBold = titleBold;
         this.titleItalic = titleItalic;
         this.titleUnderline = titleUnderline;
@@ -69,24 +69,24 @@ public class Note {
         this.id = id;
     }
 
-    public void setPinned(boolean pinned) {
-        this.isPinned = pinned;
+    public void setPinnedOrNot(boolean pinnedOrNot) {
+        this.isPinnedOrNot = pinnedOrNot;
     }
 
-    public void setPinOrder(int order) {
-        this.pinOrder = order;
+    public void setIntPinOrder(int order) {
+        this.intPinOrder = order;
     }
 
-    public int getPinOrder() {
-        return this.pinOrder;
+    public int getIntPinOrder() {
+        return this.intPinOrder;
     }
 
     public void setNoteTitle(String title) {
         this.noteTitle = title;
     }
 
-    public void setDateModified(Date date) {
-        this.dateModified = date;
+    public void setDateTimeMills(Date date) {
+        this.dateTimeMills = date;
     }
 
     public void setNoteContent(String content) {
@@ -97,68 +97,68 @@ public class Note {
         return this.id;
     }
 
-    public boolean isPinned() {
-        return this.isPinned;
+    public boolean isPinnedOrNot() {
+        return this.isPinnedOrNot;
     }
 
     public String getNoteTitle() {
         return noteTitle;
     }
 
-    public Date getDateModified() {
-        return dateModified;
+    public Date getDateTimeMills() {
+        return dateTimeMills;
     }
 
     public String getNoteContent() {
         return noteContent;
     }
 
-    public boolean isLocked() {
-        return isLocked;
+    public boolean isLockedOrNot() {
+        return isLockedOrNot;
     }
 
-    public void setFolderId(int id) {
-        this.folderId = id;
+    public void setTagFolderId(int id) {
+        this.TagFolderId = id;
     }
 
-    public void setLocked(boolean locked) {
-        this.isLocked = locked;
+    public void setLockedOrNot(boolean lockedOrNot) {
+        this.isLockedOrNot = lockedOrNot;
     }
 
-    public void setImgByteArr(byte[] bytes) {
-        this.imgByteArr = bytes;
+    public void setImgByteFormat(byte[] bytes) {
+        this.imgByteFormat = bytes;
     }
 
-    public void setImgOrientCode(int code) {
-        this.imgOrientCode = code;
+    public void setImgOrientionCode(int code) {
+        this.imgOrientionCode = code;
     }
 
-    public int getFolderId() {
-        return this.folderId;
+    public int getTagFolderId() {
+        return this.TagFolderId;
     }
 
-    public byte[] getImgByteArr() {
-        return imgByteArr;
+    public byte[] getImgByteFormat() {
+        return imgByteFormat;
     }
 
-    public int getImgOrientCode() {
-        return imgOrientCode;
+    public int getImgOrientionCode() {
+        return imgOrientionCode;
     }
 
-    public boolean isDeleted() {
-        return isDeleted;
+    public boolean isDeletedOrNot() {
+        return isDeletedOrNot;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.isDeleted = deleted;
+    public void setDeletedOrNot(boolean deletedOrNot) {
+        this.isDeletedOrNot = deletedOrNot;
     }
 
-    public int getWidgetId() {
-        return widgetId;
+    public int getCreateWidgetId() {
+        return createWidgetId;
     }
 
-    public void setWidgetId(int id) {
-        this.widgetId = id;
+    public void setCreateWidgetId(int id) {
+        this.createWidgetId = id;
     }
 
     public boolean isTitleBold() {
@@ -240,15 +240,15 @@ public class Note {
                 ", tagId=" + tagId +
                 ", noteTitle='" + noteTitle + '\'' +
                 ", noteContent='" + noteContent + '\'' +
-                ", dateModified=" + dateModified +
-                ", imgByteArr=" + Arrays.toString(imgByteArr) +
-                ", isDeleted=" + isDeleted +
-                ", isLocked=" + isLocked +
-                ", isPinned=" + isPinned +
-                ", widgetId=" + widgetId +
-                ", folderId=" + folderId +
-                ", pinOrder=" + pinOrder +
-                ", imgOrientCode=" + imgOrientCode +
+                ", dateModified=" + dateTimeMills +
+                ", imgByteArr=" + Arrays.toString(imgByteFormat) +
+                ", isDeleted=" + isDeletedOrNot +
+                ", isLocked=" + isLockedOrNot +
+                ", isPinned=" + isPinnedOrNot +
+                ", widgetId=" + createWidgetId +
+                ", folderId=" + TagFolderId +
+                ", pinOrder=" + intPinOrder +
+                ", imgOrientCode=" + imgOrientionCode +
                 ", titleBold=" + titleBold +
                 ", titleItalic=" + titleItalic +
                 ", titleUnderline=" + titleUnderline +

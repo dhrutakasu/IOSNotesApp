@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.note.iosnotes.R;
 import com.note.iosnotes.Utils.Constant;
-import com.note.iosnotes.Utils.TinyDB;
+import com.note.iosnotes.Utils.Pref;
 import com.note.iosnotes.dialog.SettingPasswordDialog;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
@@ -60,8 +60,8 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initActions() {
-        TinyDB tinyDB = new TinyDB(this);
-        String string = tinyDB.getString(Constant.PASSWORD);
+        Pref pref = new Pref(this);
+        String string = pref.getString(Constant.STR_PASSWORD);
         this.password = string;
         this.isPasswordExist = !string.equals("");
     }
@@ -98,7 +98,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 } else {
                     Toast.makeText(context, context.getResources().getString(R.string.set_password_success), Toast.LENGTH_SHORT).show();
                 }
-                new TinyDB(context).putString(Constant.PASSWORD, password);
+                new Pref(context).putString(Constant.STR_PASSWORD, password);
                 isPasswordExist = true;
                 TvSetPassTitle.setText(context.getResources().getString(R.string.change_password));
             }
