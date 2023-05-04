@@ -59,7 +59,6 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
     private String mPassword;
     private AllNotesAdapter pinnotesAdapter;
     private AllNotesAdapter notesAdapter;
-    private int numNotePine;
     private NotesDatabaseHelper helper;
     private LinearLayout LlNoNote;
     private TextView TvNumNotesList;
@@ -134,15 +133,35 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
 //                    getListNoteInFolder();
 //                } else {
 //                    RealmResults<E> findAll = mRealm.where(Note.class).contains("noteTitle", str, Case.INSENSITIVE).or().contains("noteContent", str, Case.INSENSITIVE).findAll();
-//                    if (folderId != 1) {
-//                        listNotes = findAll.where().equalTo("folderId", Integer.valueOf(folderId)).findAll();
-//                        ActivityNotesList activityNotesList = ActivityNotesList.this;
-//                        int unused = activityNotesList.numNotePine = (int) activityNotesList.listNotes.where().equalTo("isPinned", (Boolean) true).count();
-//                    } else {
-//                        listNotes = findAll.where().equalTo("isDeleted", (Boolean) true).findAll();
-//                        ActivityNotesList activityNotesList2 = ActivityNotesList.this;
-//                        int unused2 = activityNotesList2.numNotePine = (int) activityNotesList2.listNotes.where().equalTo("isPinned", (Boolean) true).count();
-//                    }
+                    if (tagId != 1) {
+                        NotesList = helper.getFolderIdWithIsDeleteOrNot(tagId, 0,0);
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            Collections.sort(NotesList, Comparator.comparing(Note::getDateTimeMills).reversed()
+                                    .thenComparing(Note::getIntPinOrder).reversed());
+                        }
+                    } else {
+                        NotesList = helper.getIsDelete(1);
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            Collections.sort(NotesList, Comparator.comparing(Note::getDateTimeMills).reversed());
+                        }
+                    }
+                PinnedNotesList = helper.getIsPin(1,tagId);
+                if (PinnedNotesList.size() > 0) {
+                    TvPinnedNotesTitle.setVisibility(View.VISIBLE);
+                    RvPinnedNotes.setVisibility(View.VISIBLE);
+                } else {
+                    TvPinnedNotesTitle.setVisibility(View.GONE);
+                    RvPinnedNotes.setVisibility(View.GONE);
+                }
+                if (NotesList.size() > 0) {
+                    TvNoteTitle.setVisibility(View.VISIBLE);
+                    RvNotes.setVisibility(View.VISIBLE);
+                } else {
+                    TvNoteTitle.setVisibility(View.GONE);
+                    RvNotes.setVisibility(View.GONE);
+                }
 //                }
 //                notesAdapter.updateData(listNotes);
                 return false;
