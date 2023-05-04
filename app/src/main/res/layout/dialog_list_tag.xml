@@ -8,7 +8,7 @@
     android:background="@drawable/bg_ios_dialog">
 
     <TextView
-        android:id="@+id/tv_dialog_choose_tag_title"
+        android:id="@+id/TvDialogChooseTagTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
@@ -23,6 +23,6 @@
         android:id="@+id/rc_list_tags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_dialog_choose_tag_title"
+        android:layout_below="@+id/TvDialogChooseTagTitle"
         android:layout_marginTop="8dp" />
 </RelativeLayout>
