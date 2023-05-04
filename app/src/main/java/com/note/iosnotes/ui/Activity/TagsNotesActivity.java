@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,10 +47,10 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
     private TextView TvNoteTitle;
     private TextView TvPinnedNotesTitle;
     private String StrTagName;
-    private ImageView img_back_notes_list;
-    private ImageView img_action_create_note;
-    private RecyclerView rc_notes;
-    private RecyclerView rc_Pinnednotes;
+    private ImageView IvBackNotesList;
+    private ImageView IvActionCreateNote;
+    private RecyclerView RvNotes;
+    private RecyclerView RvPinnedNotes;
     private ArrayList<Note> NotesList;
     private boolean isEditMode = false;
     private int mNoteSelectedPos;
@@ -60,13 +61,13 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
     private AllNotesAdapter notesAdapter;
     private int numNotePine;
     private NotesDatabaseHelper helper;
-    private LinearLayout ll_layout_no_note;
-    private TextView tv_num_notes_list;
-    private ImageView img_action_on_notes_list;
+    private LinearLayout LlNoNote;
+    private TextView TvNumNotesList;
+    private ImageView IvActionOnNotesList;
     private int colorCode;
-    private TextView tv_done_edit_notes_list;
-    private TextView tv_action_move;
-    private TextView tv_action_delete;
+    private TextView TvDoneEditedNotesList;
+    private TextView TvActionMove;
+    private TextView TvActionDelete;
     private ArrayList<Note> PinnedNotesList;
 
     @Override
@@ -85,16 +86,16 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
         TvNotesTitle = (TextView) findViewById(R.id.TvNotesTitle);
         TvNoteTitle = (TextView) findViewById(R.id.TvNoteTitle);
         TvPinnedNotesTitle = (TextView) findViewById(R.id.TvPinnedNotesTitle);
-        img_back_notes_list = (ImageView) findViewById(R.id.img_back_notes_list);
-        img_action_create_note = (ImageView) findViewById(R.id.img_action_create_note);
-        rc_notes = (RecyclerView) findViewById(R.id.rc_notes);
-        rc_Pinnednotes = (RecyclerView) findViewById(R.id.rc_Pinnednotes);
-        ll_layout_no_note = (LinearLayout) findViewById(R.id.ll_layout_no_note);
-        tv_num_notes_list = (TextView) findViewById(R.id.tv_num_notes_list);
-        img_action_on_notes_list = (ImageView) findViewById(R.id.img_action_on_notes_list);
-        tv_done_edit_notes_list = (TextView) findViewById(R.id.tv_done_edit_notes_list);
-        tv_action_move = (TextView) findViewById(R.id.tv_action_move);
-        tv_action_delete = (TextView) findViewById(R.id.tv_action_delete);
+        IvBackNotesList = (ImageView) findViewById(R.id.IvBackNotesList);
+        IvActionCreateNote = (ImageView) findViewById(R.id.IvActionCreateNote);
+        RvNotes = (RecyclerView) findViewById(R.id.RvNotes);
+        RvPinnedNotes = (RecyclerView) findViewById(R.id.RvPinnedNotes);
+        LlNoNote = (LinearLayout) findViewById(R.id.LlNoNote);
+        TvNumNotesList = (TextView) findViewById(R.id.TvNumNotesList);
+        IvActionOnNotesList = (ImageView) findViewById(R.id.IvActionOnNotesList);
+        TvDoneEditedNotesList = (TextView) findViewById(R.id.TvDoneEditedNotesList);
+        TvActionMove = (TextView) findViewById(R.id.TvActionMove);
+        TvActionDelete = (TextView) findViewById(R.id.TvActionDelete);
     }
 
     private void getIntents() {
@@ -105,12 +106,12 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void initListeners() {
-        img_back_notes_list.setOnClickListener(this);
-        img_action_create_note.setOnClickListener(this);
-        img_action_on_notes_list.setOnClickListener(this);
-        tv_done_edit_notes_list.setOnClickListener(this);
-        tv_action_move.setOnClickListener(this);
-        tv_action_delete.setOnClickListener(this);
+        IvBackNotesList.setOnClickListener(this);
+        IvActionCreateNote.setOnClickListener(this);
+        IvActionOnNotesList.setOnClickListener(this);
+        TvDoneEditedNotesList.setOnClickListener(this);
+        TvActionMove.setOnClickListener(this);
+        TvActionDelete.setOnClickListener(this);
     }
 
     private void initActions() {
@@ -123,8 +124,31 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
         TvNoteTitle.setText(getResources().getString(R.string.all_notes));
         TvPinnedNotesTitle.setText(getResources().getString(R.string.pinned));
         getListNoteInFolder();
+        ((SearchView) findViewById(R.id.SearchNotes)).setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            public boolean onQueryTextSubmit(String str) {
+                return false;
+            }
 
-        rc_Pinnednotes.setLayoutManager(new LinearLayoutManager(context));
+            public boolean onQueryTextChange(String str) {
+//                if (str.equals("") || str.isEmpty()) {
+//                    getListNoteInFolder();
+//                } else {
+//                    RealmResults<E> findAll = mRealm.where(Note.class).contains("noteTitle", str, Case.INSENSITIVE).or().contains("noteContent", str, Case.INSENSITIVE).findAll();
+//                    if (folderId != 1) {
+//                        listNotes = findAll.where().equalTo("folderId", Integer.valueOf(folderId)).findAll();
+//                        ActivityNotesList activityNotesList = ActivityNotesList.this;
+//                        int unused = activityNotesList.numNotePine = (int) activityNotesList.listNotes.where().equalTo("isPinned", (Boolean) true).count();
+//                    } else {
+//                        listNotes = findAll.where().equalTo("isDeleted", (Boolean) true).findAll();
+//                        ActivityNotesList activityNotesList2 = ActivityNotesList.this;
+//                        int unused2 = activityNotesList2.numNotePine = (int) activityNotesList2.listNotes.where().equalTo("isPinned", (Boolean) true).count();
+//                    }
+//                }
+//                notesAdapter.updateData(listNotes);
+                return false;
+            }
+        });
+        RvPinnedNotes.setLayoutManager(new LinearLayoutManager(context));
         pinnotesAdapter = new AllNotesAdapter(context, PinnedNotesList, StrTagName, new AllNotesAdapter.setNotesList() {
             public void onNoteSelected(int i) {
                 if (!isEditMode) {
@@ -139,9 +163,9 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
                 }
             }
         });
-        rc_Pinnednotes.setAdapter(pinnotesAdapter);
+        RvPinnedNotes.setAdapter(pinnotesAdapter);
 
-        rc_notes.setLayoutManager(new LinearLayoutManager(context));
+        RvNotes.setLayoutManager(new LinearLayoutManager(context));
         notesAdapter = new AllNotesAdapter(context, NotesList, StrTagName, new AllNotesAdapter.setNotesList() {
             public void onNoteSelected(int i) {
                 if (!isEditMode) {
@@ -156,11 +180,11 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
                 }
             }
         });
-        rc_notes.setAdapter(notesAdapter);
+        RvNotes.setAdapter(notesAdapter);
 
         if (itemId == 1) {
-            img_action_create_note.setVisibility(View.GONE);
-            ll_layout_no_note.setVisibility(View.GONE);
+            IvActionCreateNote.setVisibility(View.GONE);
+            LlNoNote.setVisibility(View.GONE);
         }
         toggleLayoutNoNote();
         setCountNote();
@@ -180,20 +204,20 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.img_back_notes_list:
+            case R.id.IvBackNotesList:
                 onBackPressed();
                 break;
-            case R.id.img_action_create_note:
+            case R.id.IvActionCreateNote:
                 GotoCreateNotes();
                 break;
-            case R.id.img_action_on_notes_list:
-            case R.id.tv_done_edit_notes_list:
+            case R.id.IvActionOnNotesList:
+            case R.id.TvDoneEditedNotesList:
                 GotoNOtesListMore();
                 break;
-            case R.id.tv_action_move:
+            case R.id.TvActionMove:
                 GotoMove();
                 break;
-            case R.id.tv_action_delete:
+            case R.id.TvActionDelete:
                 GotoDelete();
                 break;
         }
@@ -226,25 +250,25 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
         PinnedNotesList = helper.getIsPin(1,tagId);
         if (PinnedNotesList.size() > 0) {
             TvPinnedNotesTitle.setVisibility(View.VISIBLE);
-            rc_Pinnednotes.setVisibility(View.VISIBLE);
+            RvPinnedNotes.setVisibility(View.VISIBLE);
         } else {
             TvPinnedNotesTitle.setVisibility(View.GONE);
-            rc_Pinnednotes.setVisibility(View.GONE);
+            RvPinnedNotes.setVisibility(View.GONE);
         }
         if (NotesList.size() > 0) {
             TvNoteTitle.setVisibility(View.VISIBLE);
-            rc_notes.setVisibility(View.VISIBLE);
+            RvNotes.setVisibility(View.VISIBLE);
         } else {
             TvNoteTitle.setVisibility(View.GONE);
-            rc_notes.setVisibility(View.GONE);
+            RvNotes.setVisibility(View.GONE);
         }
     }
 
     private void toggleLayoutNoNote() {
         if (NotesList.size() == 0) {
-            ll_layout_no_note.setVisibility(View.VISIBLE);
+            LlNoNote.setVisibility(View.VISIBLE);
         } else {
-            ll_layout_no_note.setVisibility(View.GONE);
+            LlNoNote.setVisibility(View.GONE);
         }
     }
 
@@ -256,7 +280,7 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
         } else {
             str = size + " " + getResources().getString(R.string.count_note_title_multiple);
         }
-        tv_num_notes_list.setText(str);
+        TvNumNotesList.setText(str);
         helper.updateTags(new Tags(tagId, StrTagName, colorCode, size));
     }
 
@@ -491,21 +515,21 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
 
     private void toggleEditMode() {
         if (isEditMode) {
-            img_action_on_notes_list.setVisibility(View.VISIBLE);
-            img_action_create_note.setVisibility(View.VISIBLE);
-            tv_done_edit_notes_list.setVisibility(View.GONE);
-            tv_action_move.setVisibility(View.GONE);
-            tv_action_delete.setVisibility(View.GONE);
+            IvActionOnNotesList.setVisibility(View.VISIBLE);
+            IvActionCreateNote.setVisibility(View.VISIBLE);
+            TvDoneEditedNotesList.setVisibility(View.GONE);
+            TvActionMove.setVisibility(View.GONE);
+            TvActionDelete.setVisibility(View.GONE);
             isEditMode = false;
             notesAdapter.enableEditNote(false);
             pinnotesAdapter.enableEditNote(false);
             return;
         }
-        img_action_on_notes_list.setVisibility(View.GONE);
-        img_action_create_note.setVisibility(View.GONE);
-        tv_done_edit_notes_list.setVisibility(View.VISIBLE);
-        tv_action_move.setVisibility(View.VISIBLE);
-        tv_action_delete.setVisibility(View.VISIBLE);
+        IvActionOnNotesList.setVisibility(View.GONE);
+        IvActionCreateNote.setVisibility(View.GONE);
+        TvDoneEditedNotesList.setVisibility(View.VISIBLE);
+        TvActionMove.setVisibility(View.VISIBLE);
+        TvActionDelete.setVisibility(View.VISIBLE);
         isEditMode = true;
         notesAdapter.enableEditNote(true);
         pinnotesAdapter.enableEditNote(true);
