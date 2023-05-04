@@ -41,11 +41,11 @@ public class ChooseCreatedTagDialog extends Dialog {
 
     public class TagFoldersAdapter extends RecyclerView.Adapter<TagFoldersAdapter.MyViewHolder> {
 
-        public TagFoldersAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new TagFoldersAdapter.MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag_color_item, parent, false));
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag_color_item, parent, false));
         }
 
-        public void onBindViewHolder(TagFoldersAdapter.MyViewHolder holder, int i) {
+        public void onBindViewHolder(MyViewHolder holder, int i) {
             Tags tags= listTag.getTag(i);
             holder.IvTagColorCode.setImageResource(getTagColor(tags.getColorCodeId()));
             holder.TvTagColorName.setText(tags.getTagName());

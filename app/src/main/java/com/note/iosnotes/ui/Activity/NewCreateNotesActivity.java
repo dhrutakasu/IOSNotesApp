@@ -348,97 +348,103 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
         IvBtnRemoveAttach.setOnClickListener(this);
         IvDeleteNote.setOnClickListener(this);
         IvEdit.setOnClickListener(this);
-        EdtCreateNoteTitle.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (titleBold && titleItalic) {
-                    EdtCreateNoteTitle.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold_italic));
-                } else if (titleBold) {
-                    EdtCreateNoteTitle.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold));
-                } else if (titleItalic) {
-                    EdtCreateNoteTitle.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_italic));
-                } else {
-                    EdtCreateNoteTitle.setTypeface(null);
-                }
-
-
-                if (titleUnderline && titleStrike) {
-                    for (UnderlineSpan span : s.getSpans(0, s.length(), UnderlineSpan.class)) {
-                        s.setSpan(span, 0, s.length(), 0);
-                    }
-
-                    for (StrikethroughSpan span : s.getSpans(0, s.length(), StrikethroughSpan.class)) {
-                        s.setSpan(span, 0, s.length(), 0);
-                    }
-                } else if (titleStrike) {
-                    for (StrikethroughSpan span : s.getSpans(0, s.length(), StrikethroughSpan.class)) {
-                        s.setSpan(span, 0, s.length(), 0);
-                    }
-                } else if (titleUnderline) {
-                    for (UnderlineSpan span : s.getSpans(0, s.length(), UnderlineSpan.class)) {
-                        s.setSpan(span, 0, s.length(), 0);
-                    }
-                } else {
-                    SpannableString spannableString1 = new SpannableString(s.toString());
-                    EdtCreateNoteTitle.setText(spannableString1);
-                }
-            }
-        });
-        EdtCreateNote.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (contentBold && contentItalic) {
-                    EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold_italic));
-                } else if (contentBold) {
-                    EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold));
-                } else if (contentItalic) {
-                    EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_italic));
-                } else {
-                    EdtCreateNote.setTypeface(null);
-                }
-
-
-                if (contentUnderline && contentStrike) {
-                    for (UnderlineSpan span : s.getSpans(0, s.length(), UnderlineSpan.class)) {
-                        s.setSpan(span, 0, s.length(), 0);
-                    }
-
-                    for (StrikethroughSpan span : s.getSpans(0, s.length(), StrikethroughSpan.class)) {
-                        s.setSpan(span, 0, s.length(), 0);
-                    }
-                } else if (contentStrike) {
-                    for (StrikethroughSpan span : s.getSpans(0, s.length(), StrikethroughSpan.class)) {
-                        s.setSpan(span, 0, s.length(), 0);
-                    }
-                } else if (contentUnderline) {
-                    for (UnderlineSpan span : s.getSpans(0, s.length(), UnderlineSpan.class)) {
-                        s.setSpan(span, 0, s.length(), 0);
-                    }
-                } else {
-                    SpannableString spannableString1 = new SpannableString(s.toString());
-                    EdtCreateNote.setText(spannableString1);
-                }
-            }
-        });
+//        EdtCreateNoteTitle.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                if (s.toString().length() > 0) {
+//                    if (titleBold && titleItalic) {
+//                        EdtCreateNoteTitle.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold_italic));
+//                    } else if (titleBold) {
+//                        EdtCreateNoteTitle.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold));
+//                    } else if (titleItalic) {
+//                        EdtCreateNoteTitle.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_italic));
+//                    } else {
+//                        EdtCreateNoteTitle.setTypeface(null);
+//                    }
+//
+//
+//                    if (titleUnderline && titleStrike) {
+//                        for (UnderlineSpan span : s.getSpans(0, s.length(), UnderlineSpan.class)) {
+//                            s.setSpan(span, 0, s.length(), 0);
+//                        }
+//
+//                        for (StrikethroughSpan span : s.getSpans(0, s.length(), StrikethroughSpan.class)) {
+//                            s.setSpan(span, 0, s.length(), 0);
+//                        }
+//                    } else if (titleStrike) {
+//                        for (StrikethroughSpan span : s.getSpans(0, s.length(), StrikethroughSpan.class)) {
+//                            s.setSpan(span, 0, s.length(), 0);
+//                        }
+//                    } else if (titleUnderline) {
+//                        for (UnderlineSpan span : s.getSpans(0, s.length(), UnderlineSpan.class)) {
+//                            s.setSpan(span, 0, s.length(), 0);
+//                        }
+//                    } else {
+//                        if (s.length() >= 0) {
+//                            EdtCreateNoteTitle.setText(s.toString());
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//        EdtCreateNote.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                if (s.toString().length() > 0) {
+//                    if (contentBold && contentItalic) {
+//                        EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold_italic));
+//                    } else if (contentBold) {
+//                        EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold));
+//                    } else if (contentItalic) {
+//                        EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_italic));
+//                    } else {
+//                        EdtCreateNote.setTypeface(null);
+//                    }
+//
+//
+//                    if (contentUnderline && contentStrike) {
+//                        for (UnderlineSpan span : s.getSpans(0, s.length(), UnderlineSpan.class)) {
+//                            s.setSpan(span, 0, s.length(), 0);
+//                        }
+//
+//                        for (StrikethroughSpan span : s.getSpans(0, s.length(), StrikethroughSpan.class)) {
+//                            s.setSpan(span, 0, s.length(), 0);
+//                        }
+//                    } else if (contentStrike) {
+//                        for (StrikethroughSpan span : s.getSpans(0, s.length(), StrikethroughSpan.class)) {
+//                            s.setSpan(span, 0, s.length(), 0);
+//                        }
+//                    } else if (contentUnderline) {
+//                        for (UnderlineSpan span : s.getSpans(0, s.length(), UnderlineSpan.class)) {
+//                            s.setSpan(span, 0, s.length(), 0);
+//                        }
+//                    } else {
+//                        if (s.length() >= 0) {
+//                            EdtCreateNote.setText(s.toString());
+//                        }
+//                    }
+//                }
+//            }
+//        });
     }
 
     private void initActions() {
@@ -453,9 +459,14 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
                     .into(IvAttach);
             RlAttachViewer.setVisibility(View.VISIBLE);
         }
-        int size= new Pref(context).getInt(Constant.STR_TEXT_SIZE);
-        EdtCreateNote.setTextSize(getResources().getDimension(com.intuit.ssp.R.dimen._6ssp) * Float.valueOf(size) / 100.0f);
-        EdtCreateNoteTitle.setTextSize(getResources().getDimension(com.intuit.ssp.R.dimen._8ssp) * Float.valueOf(size) / 100.0f);
+        int size = new Pref(context).getInt(Constant.STR_TEXT_SIZE);
+         if (size==0){
+             EdtCreateNote.setTextSize(getResources().getDimension(com.intuit.ssp.R.dimen._6ssp) * Float.valueOf(100) / 100.0f);
+             EdtCreateNoteTitle.setTextSize(getResources().getDimension(com.intuit.ssp.R.dimen._8ssp) * Float.valueOf(100) / 100.0f);
+         }else {
+             EdtCreateNote.setTextSize(getResources().getDimension(com.intuit.ssp.R.dimen._6ssp) * Float.valueOf(size) / 100.0f);
+             EdtCreateNoteTitle.setTextSize(getResources().getDimension(com.intuit.ssp.R.dimen._8ssp) * Float.valueOf(size) / 100.0f);
+         }
     }
 
     @Override
@@ -1065,7 +1076,7 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
     private void takePhoto() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, TAKE_PHOTO_CODE);
     }
 
