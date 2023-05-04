@@ -14,14 +14,14 @@
         android:theme="@style/Theme.IOSNotes"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.Activity.ActivityNewCreateNotes"
+            android:name=".ui.Activity.NewCreateNotesActivity"
             android:launchMode="singleInstance"
             android:exported="false" />
         <activity
             android:name=".ui.Activity.TagsNotesActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.Activity.ActivityScanCode"
+            android:name=".ui.Activity.ScanQRCodeActivity"
             android:exported="false" />
         <activity
             android:name=".ui.Activity.SettingActivity"
@@ -47,7 +47,7 @@
         </provider>
 
         <receiver
-            android:name=".provider.NoteWidgetProvider"
+            android:name=".provider.NoteCreateWidgetProvider"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -60,7 +60,7 @@
             android:name=".provider.NoteWidgetCreatedReceiver"
             android:enabled="true"
             android:exported="false" />
-        <receiver android:name=".provider.DeviceBootReceiver"
+        <receiver android:name=".provider.BootReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -68,7 +68,7 @@
         </receiver>
 
         <service
-            android:name=".provider.NoteWidgetService"
+            android:name=".provider.WidgetService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
@@ -85,5 +85,4 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <uses-permission android:name="android.permission.CAMERA" />
-
 </manifest>
