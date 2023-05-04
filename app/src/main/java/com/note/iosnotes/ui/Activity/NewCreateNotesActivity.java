@@ -16,7 +16,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.StrikethroughSpan;
 import android.text.style.UnderlineSpan;
 import android.view.Gravity;
@@ -141,7 +143,7 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
         getIntents();
         getNoteData();
         initListeners();
-        initActions();
+
     }
 
     enum IMAGE_ACTION {
@@ -216,6 +218,7 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
                 contentUnderline = mNote.isContentUnderline();
                 contentStrike = mNote.isContentStrike();
                 align = mNote.getAlign();
+                initActions();
                 setTextStyles();
                 return;
             }
@@ -241,21 +244,20 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
         contentUnderline = false;
         contentStrike = false;
         align = 1;
-
+        initActions();
     }
 
     private void setTextStyles() {
-        if (titleBold) {
+        if (titleBold && titleItalic) {
+            EdtCreateNoteTitle.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold_italic));
+        } else if (titleBold) {
             EdtCreateNoteTitle.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold));
-        }
-        if (titleItalic) {
+        } else if (titleItalic) {
             EdtCreateNoteTitle.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_italic));
         } else {
             EdtCreateNoteTitle.setTypeface(null);
         }
-        if (titleBold && titleItalic) {
-            EdtCreateNoteTitle.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold_italic));
-        }
+
 
         if (titleUnderline && titleStrike) {
             System.out.println("-------- 1 true : true ");
@@ -279,16 +281,14 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
             EdtCreateNoteTitle.setText(spannableString1);
         }
 
-        if (contentBold) {
+        if (contentBold && contentItalic) {
+            EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold_italic));
+        } else if (contentBold) {
             EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold));
-        }
-        if (contentItalic) {
+        } else if (contentItalic) {
             EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_italic));
         } else {
             EdtCreateNote.setTypeface(null);
-        }
-        if (contentBold && contentItalic) {
-            EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold_italic));
         }
 
         if (contentUnderline && contentStrike) {
@@ -348,13 +348,103 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
         IvBtnRemoveAttach.setOnClickListener(this);
         IvDeleteNote.setOnClickListener(this);
         IvEdit.setOnClickListener(this);
+        EdtCreateNoteTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (titleBold && titleItalic) {
+                    EdtCreateNoteTitle.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold_italic));
+                } else if (titleBold) {
+                    EdtCreateNoteTitle.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold));
+                } else if (titleItalic) {
+                    EdtCreateNoteTitle.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_italic));
+                } else {
+                    EdtCreateNoteTitle.setTypeface(null);
+                }
+
+
+                if (titleUnderline && titleStrike) {
+                    for (UnderlineSpan span : s.getSpans(0, s.length(), UnderlineSpan.class)) {
+                        s.setSpan(span, 0, s.length(), 0);
+                    }
+
+                    for (StrikethroughSpan span : s.getSpans(0, s.length(), StrikethroughSpan.class)) {
+                        s.setSpan(span, 0, s.length(), 0);
+                    }
+                } else if (titleStrike) {
+                    for (StrikethroughSpan span : s.getSpans(0, s.length(), StrikethroughSpan.class)) {
+                        s.setSpan(span, 0, s.length(), 0);
+                    }
+                } else if (titleUnderline) {
+                    for (UnderlineSpan span : s.getSpans(0, s.length(), UnderlineSpan.class)) {
+                        s.setSpan(span, 0, s.length(), 0);
+                    }
+                } else {
+                    SpannableString spannableString1 = new SpannableString(s.toString());
+                    EdtCreateNoteTitle.setText(spannableString1);
+                }
+            }
+        });
+        EdtCreateNote.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (contentBold && contentItalic) {
+                    EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold_italic));
+                } else if (contentBold) {
+                    EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold));
+                } else if (contentItalic) {
+                    EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_italic));
+                } else {
+                    EdtCreateNote.setTypeface(null);
+                }
+
+
+                if (contentUnderline && contentStrike) {
+                    for (UnderlineSpan span : s.getSpans(0, s.length(), UnderlineSpan.class)) {
+                        s.setSpan(span, 0, s.length(), 0);
+                    }
+
+                    for (StrikethroughSpan span : s.getSpans(0, s.length(), StrikethroughSpan.class)) {
+                        s.setSpan(span, 0, s.length(), 0);
+                    }
+                } else if (contentStrike) {
+                    for (StrikethroughSpan span : s.getSpans(0, s.length(), StrikethroughSpan.class)) {
+                        s.setSpan(span, 0, s.length(), 0);
+                    }
+                } else if (contentUnderline) {
+                    for (UnderlineSpan span : s.getSpans(0, s.length(), UnderlineSpan.class)) {
+                        s.setSpan(span, 0, s.length(), 0);
+                    }
+                } else {
+                    SpannableString spannableString1 = new SpannableString(s.toString());
+                    EdtCreateNote.setText(spannableString1);
+                }
+            }
+        });
     }
 
     private void initActions() {
         TvFolderNameNote.setText(TagFolderName);
         EdtCreateNote.setText(StrNoteContent);
         EdtCreateNoteTitle.setText(StrNoteTitle);
-        EdtCreateNoteTitle.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold));
         if (Constant.getBitmapOfRotate(ImageBytes, ImageOrientionCode) == null) {
             RlAttachViewer.setVisibility(View.GONE);
         } else {
@@ -363,6 +453,9 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
                     .into(IvAttach);
             RlAttachViewer.setVisibility(View.VISIBLE);
         }
+        int size= new Pref(context).getInt(Constant.STR_TEXT_SIZE);
+        EdtCreateNote.setTextSize(getResources().getDimension(com.intuit.ssp.R.dimen._6ssp) * Float.valueOf(size) / 100.0f);
+        EdtCreateNoteTitle.setTextSize(getResources().getDimension(com.intuit.ssp.R.dimen._8ssp) * Float.valueOf(size) / 100.0f);
     }
 
     @Override
@@ -501,12 +594,12 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
         int bgDrawable;
         RemoteViews WidgetViews = new RemoteViews(packageName, R.layout.widget_layout);
         NoteWidgetId = id;
-        int i3 = new Pref(context).getInt(Constant.TAG_WIDGET_BG_ID);
+        int bgId = new Pref(context).getInt(Constant.TAG_WIDGET_BG_ID);
         int i4 = R.color.black;
-        if (i3 != 1) {
-            if (i3 == 2) {
+        if (bgId != 1) {
+            if (bgId == 2) {
                 bgDrawable = R.drawable.bg_widget_03;
-            } else if (i3 != 3) {
+            } else if (bgId != 3) {
                 bgDrawable = R.drawable.bg_widget_01;
             } else {
                 bgDrawable = R.drawable.bg_widget_04;
@@ -594,7 +687,7 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
             dateTimeMilles = Calendar.getInstance().getTime();
         }
 
-        new BottomView(getSupportFragmentManager(), str, Constant.getTime(dateTimeMilles), isPinnedOrNot, isLockedOrNot, ImageBytes, ImageOrientionCode, countWords(EdtCreateNote.getText().toString()), titleBold, titleItalic, titleUnderline, titleStrike, contentBold, contentItalic, contentUnderline, contentStrike, align, new BottomView.IBottomMenu() {
+        new BottomView(getSupportFragmentManager(), str, Constant.getTime(dateTimeMilles), isPinnedOrNot, isLockedOrNot, ImageBytes, ImageOrientionCode, countWords(EdtCreateNote.getText().toString()), titleBold, titleItalic, titleUnderline, titleStrike, contentBold, contentItalic, contentUnderline, contentStrike, align, new BottomView.setBottomMenu() {
             public void onDeleteNote() {
                 GotoConfirmDeleteNote();
             }
@@ -692,6 +785,12 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
             }
 
             @Override
+            public void onTextSize(int size) {
+                EdtCreateNote.setTextSize(getResources().getDimension(com.intuit.ssp.R.dimen._6ssp) * Float.valueOf(size) / 100.0f);
+                EdtCreateNoteTitle.setTextSize(getResources().getDimension(com.intuit.ssp.R.dimen._8ssp) * Float.valueOf(size) / 100.0f);
+            }
+
+            @Override
             public void onTitleNote(boolean IsBold, boolean IsItalic, boolean IsUnderline, boolean IsStrike) {
                 titleBold = IsBold;
                 titleItalic = IsItalic;
@@ -738,16 +837,14 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
                 contentItalic = IsItalic;
                 contentUnderline = IsUnderline;
                 contentStrike = IsStrike;
-                if (IsBold) {
+                if (IsBold && IsItalic) {
+                    EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold_italic));
+                } else if (IsBold) {
                     EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold));
-                }
-                if (IsItalic) {
+                } else if (IsItalic) {
                     EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_italic));
                 } else {
                     EdtCreateNote.setTypeface(null);
-                }
-                if (IsBold && IsItalic) {
-                    EdtCreateNote.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_bold_italic));
                 }
 
                 if (IsUnderline && IsStrike) {
