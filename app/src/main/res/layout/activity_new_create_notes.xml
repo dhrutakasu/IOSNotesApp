@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Activity.ActivityNewCreateNotes">
+    tools:context=".ui.Activity.NewCreateNotesActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:layout_height="@dimen/_50sdp"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
-            android:weightSum="5">
+            android:weightSum="4">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -35,23 +35,6 @@
                     android:src="@drawable/ic_delete"
                     android:visibility="visible" />
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="left|center_vertical|center_horizontal|center|start">
-
-                <ImageView
-                    android:id="@+id/IvTextNote"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_marginStart="8dp"
-                    android:foreground="?attr/actionBarItemBackground"
-                    android:padding="6dp"
-                    android:src="@drawable/ic_text_align"
-                    android:visibility="visible" />
-            </LinearLayout>
-
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
