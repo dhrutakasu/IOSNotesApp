@@ -1,8 +1,11 @@
 package com.note.iosnotes.ui.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -16,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +28,6 @@ import com.note.iosnotes.Model.Tags;
 import com.note.iosnotes.NotesDatabaseHelper;
 import com.note.iosnotes.R;
 import com.note.iosnotes.Utils.BottomSort;
-import com.note.iosnotes.Utils.BottomView;
 import com.note.iosnotes.Utils.Constant;
 import com.note.iosnotes.Utils.Pref;
 import com.note.iosnotes.dialog.AddNewTagDialog;
@@ -72,6 +73,9 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
     private TextView TvActionMove;
     private TextView TvActionDelete;
     private ArrayList<Note> PinnedNotesList;
+    private String isSort = "";
+    private boolean isTime = true;
+    private String isType;
 //    private SearchView SearchNotes;
 
     @Override
@@ -171,45 +175,16 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
             StrTagName = getResources().getString(R.string.all_notes);
         }
         mPassword = new Pref(getApplicationContext()).getString(Constant.STR_PASSWORD);
+        System.out.println("--------- pass " + mPassword);
         TvNotesTitle.setText(StrTagName);
         TvNoteTitle.setText(getResources().getString(R.string.all_notes));
         TvPinnedNotesTitle.setText(getResources().getString(R.string.pinned));
         getListNoteInFolder();
 
         RvPinnedNotes.setLayoutManager(new LinearLayoutManager(context));
-        pinnotesAdapter = new AllNotesAdapter(context, PinnedNotesList, StrTagName, new AllNotesAdapter.setNotesList() {
-            public void onNoteSelected(int i) {
-                if (!isEditMode) {
-                    mNoteSelectedPos = i;
-                    if (itemId == 1) {
-                        showDialogRecoveryNote();
-                    } else if (mPassword == null || mPassword.equals("") || !((Note) NotesList.get(i)).isLockedOrNot()) {
-                        openNote(true);
-                    } else {
-                        confirmPassword();
-                    }
-                }
-            }
-        });
-        RvPinnedNotes.setAdapter(pinnotesAdapter);
 
         RvNotes.setLayoutManager(new LinearLayoutManager(context));
-        notesAdapter = new AllNotesAdapter(context, NotesList, StrTagName, new AllNotesAdapter.setNotesList() {
-            public void onNoteSelected(int i) {
-                if (!isEditMode) {
-                    mNoteSelectedPos = i;
-                    if (itemId == 1) {
-                        showDialogRecoveryNote();
-                    } else if (mPassword == null || mPassword.equals("") || !((Note) NotesList.get(i)).isLockedOrNot()) {
-                        openNote(false);
-                    } else {
-                        confirmPassword();
-                    }
-                }
-            }
-        });
-        RvNotes.setAdapter(notesAdapter);
-
+        setAdapters();
         if (itemId == 1) {
             IvActionCreateNote.setVisibility(View.GONE);
             IvActionSort.setVisibility(View.GONE);
@@ -217,6 +192,45 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
         }
         toggleLayoutNoNote();
         setCountNote();
+    }
+
+    private void setAdapters() {
+        pinnotesAdapter = new AllNotesAdapter(context, PinnedNotesList, StrTagName, new AllNotesAdapter.setNotesList() {
+            public void onNoteSelected(int i) {
+                mPassword = new Pref(getApplicationContext()).getString(Constant.STR_PASSWORD);
+                if (!isEditMode) {
+                    mNoteSelectedPos = i;
+                    if (itemId == 1) {
+                        showDialogRecoveryNote();
+                    } else if (mPassword == null || mPassword.equals("") || !((Note) NotesList.get(i)).isLockedOrNot()) {
+                        System.out.println("------ IDdd : " + (NotesList.get(mNoteSelectedPos)).getId());
+                        openNote(true);
+                    } else {
+                        isType = "IsPin";
+                        confirmPassword();
+                    }
+                }
+            }
+        });
+        RvPinnedNotes.setAdapter(pinnotesAdapter);
+        notesAdapter = new AllNotesAdapter(context, NotesList, StrTagName, new AllNotesAdapter.setNotesList() {
+            public void onNoteSelected(int i) {
+                mPassword = new Pref(getApplicationContext()).getString(Constant.STR_PASSWORD);
+                if (!isEditMode) {
+                    mNoteSelectedPos = i;
+                    if (itemId == 1) {
+                        showDialogRecoveryNote();
+                    } else if (mPassword == null || mPassword.equals("") || !((Note) NotesList.get(i)).isLockedOrNot()) {
+                        System.out.println("------ IDdd : " + (NotesList.get(mNoteSelectedPos)).getId());
+                        openNote(false);
+                    } else {
+                        isType = "IsNote";
+                        confirmPassword();
+                    }
+                }
+            }
+        });
+        RvNotes.setAdapter(notesAdapter);
     }
 
     @Override
@@ -293,6 +307,53 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
         } else {
             TvNoteTitle.setVisibility(View.GONE);
             RvNotes.setVisibility(View.GONE);
+        }
+        if (!isSort.equalsIgnoreCase("")) {
+            System.out.println("------ sort 22 : " + isSort);
+            if (isSort.equalsIgnoreCase("Ascending")) {
+                Collections.sort(NotesList, new Comparator<Note>() {
+                    @Override
+                    public int compare(Note lhs, Note rhs) {
+                        return lhs.getNoteTitle().compareToIgnoreCase(rhs.getNoteTitle());
+                    }
+                });
+            } else if (isSort.equalsIgnoreCase("Descending")) {
+                Collections.sort(NotesList, new Comparator<Note>() {
+                    @Override
+                    public int compare(Note lhs, Note rhs) {
+                        return rhs.getNoteTitle().compareToIgnoreCase(lhs.getNoteTitle());
+                    }
+                });
+            } else if (isSort.equalsIgnoreCase("Time")) {
+                Collections.sort(NotesList, new Comparator<Note>() {
+                    @Override
+                    public int compare(Note lhs, Note rhs) {
+                        return lhs.getDateTimeMills().toString().compareToIgnoreCase(rhs.getDateTimeMills().toString());
+                    }
+                });
+            }
+            if (isSort.equalsIgnoreCase("Ascending")) {
+                Collections.sort(PinnedNotesList, new Comparator<Note>() {
+                    @Override
+                    public int compare(Note lhs, Note rhs) {
+                        return lhs.getNoteTitle().compareToIgnoreCase(rhs.getNoteTitle());
+                    }
+                });
+            } else if (isSort.equalsIgnoreCase("Descending")) {
+                Collections.sort(PinnedNotesList, new Comparator<Note>() {
+                    @Override
+                    public int compare(Note lhs, Note rhs) {
+                        return rhs.getNoteTitle().compareToIgnoreCase(lhs.getNoteTitle());
+                    }
+                });
+            } else if (isSort.equalsIgnoreCase("Time")) {
+                Collections.sort(PinnedNotesList, new Comparator<Note>() {
+                    @Override
+                    public int compare(Note lhs, Note rhs) {
+                        return lhs.getDateTimeMills().toString().compareToIgnoreCase(rhs.getDateTimeMills().toString());
+                    }
+                });
+            }
         }
     }
 
@@ -547,33 +608,76 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
 
     private void GotoSort() {
         new BottomSort(new BottomSort.setBottomSort() {
-
             @Override
             public void onSortAscending() {
-//                getListNoteInFolder();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                    Comparator<Note> c = Comparator.comparing(Note::getNoteTitle);
-//                    NotesList.sort(c);
-                }
-                notesAdapter.updateData(NotesList);
+                isSort = "Ascending";
+                Collections.sort(NotesList, new Comparator<Note>() {
+                    @Override
+                    public int compare(Note lhs, Note rhs) {
+                        return lhs.getNoteTitle().compareToIgnoreCase(rhs.getNoteTitle());
+                    }
+                });
+                Collections.sort(PinnedNotesList, new Comparator<Note>() {
+                    @Override
+                    public int compare(Note lhs, Note rhs) {
+                        return lhs.getNoteTitle().compareToIgnoreCase(rhs.getNoteTitle());
+                    }
+                });
+                setAdapters();
             }
 
             @Override
             public void onSortDescending() {
-//                getListNoteInFolder();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                    Collections.sort(NotesList);
-//                    notesAdapter.updateData(NotesList);
-                }
+                isSort = "Descending";
+                Collections.sort(NotesList, new Comparator<Note>() {
+                    @Override
+                    public int compare(Note lhs, Note rhs) {
+                        return rhs.getNoteTitle().compareToIgnoreCase(lhs.getNoteTitle());
+                    }
+                });
+                Collections.sort(PinnedNotesList, new Comparator<Note>() {
+                    @Override
+                    public int compare(Note lhs, Note rhs) {
+                        return rhs.getNoteTitle().compareToIgnoreCase(lhs.getNoteTitle());
+                    }
+                });
+                setAdapters();
             }
 
             @Override
             public void onSortTime() {
-//                getListNoteInFolder();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                    Collections.sort(NotesList, Comparator.comparing(Note::getDateTimeMills).reversed());
+                isSort = "Time";
+                if (isTime) {
+                    Collections.sort(NotesList, new Comparator<Note>() {
+                        @Override
+                        public int compare(Note lhs, Note rhs) {
+                            return lhs.getDateTimeMills().toString().compareToIgnoreCase(rhs.getDateTimeMills().toString());
+                        }
+                    });
+                    Collections.sort(PinnedNotesList, new Comparator<Note>() {
+                        @Override
+                        public int compare(Note lhs, Note rhs) {
+                            return lhs.getDateTimeMills().toString().compareToIgnoreCase(rhs.getDateTimeMills().toString());
+                        }
+                    });
+
+                    isTime = false;
+                } else {
+                    Collections.sort(NotesList, new Comparator<Note>() {
+                        @Override
+                        public int compare(Note lhs, Note rhs) {
+                            return rhs.getDateTimeMills().toString().compareToIgnoreCase(lhs.getDateTimeMills().toString());
+                        }
+                    });
+                    Collections.sort(PinnedNotesList, new Comparator<Note>() {
+                        @Override
+                        public int compare(Note lhs, Note rhs) {
+                            return rhs.getDateTimeMills().toString().compareToIgnoreCase(lhs.getDateTimeMills().toString());
+                        }
+                    });
+                    isTime = true;
                 }
-                notesAdapter.updateData(NotesList);
+                setAdapters();
             }
         }).show(getSupportFragmentManager(), "BottomSort");
     }
@@ -696,8 +800,13 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
                     }
 
                     public void SetOnPasswordEnter(String str) {
+                        System.out.println("------ IDdd pass : " + (NotesList.get(mNoteSelectedPos)).getId()+" type : "+isType);
                         if (str.equals(mPassword)) {
-                            openNote(true);
+                            if (isType.equalsIgnoreCase("IsPin")) {
+                                openNote(true);
+                            }else {
+                                openNote(false);
+                            }
                         } else {
                             Toast.makeText(context, getResources().getString(R.string.password_incorrect), Toast.LENGTH_SHORT).show();
                         }

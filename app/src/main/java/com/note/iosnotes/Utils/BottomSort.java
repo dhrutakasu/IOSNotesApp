@@ -44,16 +44,16 @@ public class BottomSort extends RoundedBottomDialogFragment {
         RlActionSortTime = (RelativeLayout) view.findViewById(R.id.RlActionSortTime);
         BtnCloseBottomSort.setOnClickListener(view14 -> dismiss());
         RlActionSortAscending.setOnClickListener(view13 -> {
-            dismiss();
             setBottomSort.onSortAscending();
+            dismiss();
         });
         RlActionSortDescending.setOnClickListener(view12 -> {
-            dismiss();
             setBottomSort.onSortDescending();
+            dismiss();
         });
         RlActionSortTime.setOnClickListener(view1 -> {
-            dismiss();
             setBottomSort.onSortTime();
+            dismiss();
         });
     }
 }

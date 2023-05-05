@@ -1317,7 +1317,6 @@ public class NotesDatabaseHelper extends SQLiteOpenHelper {
             objDatabase = getReadableDatabase();
             Cursor cursor = objDatabase.rawQuery("SELECT * FROM " + NOTES_TABLE_NAME + " WHERE " + columnName + "=? " + columnValue + "=? ", null);
             if (cursor.moveToFirst()) {
-                objDatabase.close();
                 Log.d("Record  Already Exists", "Table is:" + NOTES_TABLE_NAME + " ColumnName:" + columnName);
                 return true;
 

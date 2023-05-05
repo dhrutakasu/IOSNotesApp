@@ -207,6 +207,8 @@ public class BottomView extends RoundedBottomDialogFragment {
                     public void setTextSize(int sizef) {
                         int size= new Pref(getContext()).getInt(Constant.STR_TEXT_SIZE);
                         setBottomMenu.onTextSize(size);
+                        String sizeStr = new Pref(getContext()).getInt(Constant.STR_TEXT_SIZE) + "%";
+                        TvSize.setText(sizeStr);
                     }
                 });
                 notesTextSizeDialog.show();
