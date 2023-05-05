@@ -105,4 +105,7 @@
     <string name="underline">Underline</string>
     <string name="strikethrough">Strikethrough</string>
     <string name="choose_background">Choose Background</string>
+    <string name="sort_alphabetic_ascending">Ascending A-Z</string>
+    <string name="sort_alphabetic_descending">Descending Z-A</string>
+    <string name="sort_alphabetic_time">Sort Time</string>
 </resources>
