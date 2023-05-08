@@ -201,9 +201,9 @@
                     <ImageView
                         android:id="@+id/IvAttach"
                         android:layout_width="250dp"
+                        android:adjustViewBounds="true"
                         android:layout_height="wrap_content"
                         android:scaleType="center" />
-
                     <ImageButton
                         android:id="@+id/IvBtnRemoveAttach"
                         android:layout_width="24dp"
@@ -217,6 +217,7 @@
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_close"
                         app:tint="#ffffff" />
+
 
                 </RelativeLayout>
             </RelativeLayout>
