@@ -805,44 +805,55 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
                         isInserted = true;
                     }
                 }
-                isPinnedOrNot = !isPinnedOrNot;
-                if (isPinnedOrNot) {
-                    int TagCount;
-                    if (noteActionCode == 1) {
-                        TagCount = (int) noteHelper.getIsPinOrder((int) NoteId);
-                    } else {
-                        System.out.println("----- NoteId : " + (notesCount + 1));
-                        TagCount = (int) noteHelper.getIsPinOrder((int) (count + 1));
-                    }
-                    if (TagCount == 0) {
-                        PinOrder = 1;
-                    } else {
-                        PinOrder = TagCount + 1;
-                    }
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.pin_to_top), Toast.LENGTH_SHORT).show();
-                } else {
-                    PinOrder = 0;
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.un_pin_note), Toast.LENGTH_SHORT).show();
-                }
-                Tags tags;
-                if (noteActionCode == 1) {
-                    isNoteEdited = true;
-                    returnResult = NotePinResult;
-                    System.out.println("----- TagFolderId : " + TagFolderId);
-                    tags = noteHelper.getTagsRecord((int) TagFolderId);
-                } else {
-                    System.out.println("----- TagFolderId : " + NoteId);
-                    tags = noteHelper.getTagsRecord((int) NoteId);
-                    Note note = noteHelper.getNoteRecord((int) (count + 1));
-                    System.out.println("----- countsss : " + (count + 1));
+                int finalNotesCount = notesCount;
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isPinnedOrNot = !isPinnedOrNot;
+                        if (isPinnedOrNot) {
+                            int TagCount;
+                            if (noteActionCode == 1) {
+                                TagCount = (int) noteHelper.getIsPinOrder((int) NoteId);
+                            } else {
+//                        if (notesCount >= 0) {
+//                            System.out.println("----- NoteId notesCount: " + (notesCount + 1));
+//                            System.out.println("----- NoteId : " + (count + 1));
+//                            TagCount = (int) noteHelper.getIsPinOrder((int) (count + 1));
+//                        }else {
+                                TagCount = (int) noteHelper.getIsPinOrder((int) (finalNotesCount + 1));
+//                        }
+                            }
+                            if (TagCount == 0) {
+                                PinOrder = 1;
+                            } else {
+                                PinOrder = TagCount + 1;
+                            }
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.pin_to_top), Toast.LENGTH_SHORT).show();
+                        } else {
+                            PinOrder = 0;
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.un_pin_note), Toast.LENGTH_SHORT).show();
+                        }
+                        Tags tags;
+                        if (noteActionCode == 1) {
+                            isNoteEdited = true;
+                            returnResult = NotePinResult;
+                            System.out.println("----- TagFolderId : " + TagFolderId);
+                            tags = noteHelper.getTagsRecord((int) TagFolderId);
+                        } else {
+                            System.out.println("----- TagFolderId : " + NoteId);
+                            tags = noteHelper.getTagsRecord((int) NoteId);
+                            Note note = noteHelper.getNoteRecord((int) (finalNotesCount + 1));
+                            System.out.println("----- countsss : " + (finalNotesCount + 1));
 
-                    System.out.println("----- isPinnedOrNot : " + isPinnedOrNot);
-                    System.out.println("----- PinOrder : " + PinOrder);
-                    note.setPinnedOrNot(isPinnedOrNot);
-                    note.setIntPinOrder(PinOrder);
-                    noteHelper.updateNotes(note);
-                }
-                noteHelper.updateTags(new Tags(tags.getId(), tags.getTagName(), tags.getColorCodeId(), (tags.getCounterNote() + 1)));
+                            System.out.println("----- isPinnedOrNot : " + isPinnedOrNot);
+                            System.out.println("----- PinOrder : " + PinOrder);
+                            note.setPinnedOrNot(isPinnedOrNot);
+                            note.setIntPinOrder(PinOrder);
+                            noteHelper.updateNotes(note);
+                        }
+                        noteHelper.updateTags(new Tags(tags.getId(), tags.getTagName(), tags.getColorCodeId(), (tags.getCounterNote() + 1)));
+                    }
+                },500);
             }
 
             public void onScanNote() {
@@ -1183,11 +1194,11 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
         switch (requestCode) {
             case REQUEST_ID_MULTIPLE_PERMISSIONS:
                 if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), "Requires Access to Camera.", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "Requires Access to Camera.", Toast.LENGTH_SHORT).show();
                 } else if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), "Requires Access to Your Storage.", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "Requires Access to Your Storage.", Toast.LENGTH_SHORT).show();
                 } else if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), "Requires Access to Your Storage.", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "Requires Access to Your Storage.", Toast.LENGTH_SHORT).show();
                 } else {
                     showDialogAttachImage();
                 }
@@ -1236,43 +1247,6 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
                         }
                     }
                 }
-                /*switch (resultCode) {
-                    case RESULT_OK:
-                        if (intent != null) {
-                            Uri selectedImage = intent.getData();
-                            System.out.println("-- uRI  : " + selectedImage);
-                            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                            if (selectedImage != null) {
-                                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                                if (cursor != null) {
-                                    cursor.moveToFirst();
-                                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                                    String picturePath = cursor.getString(columnIndex);
-                                    System.out.println("-- path : " + picturePath);
-                                    Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
-
-                                    //todo check
-                                    new Handler().postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            GotoImagePicker(bitmap);
-                                        }
-                                    }, 1000);
-                                }
-                            }
-//                            getPath(context,selectedImage);
-//                            System.out.println("-- uRI  :1 " +  getPath(context,selectedImage));
-//                            Bitmap bitmap1 = BitmapFactory.decodeFile(getPath(context,selectedImage));
-                            //todo check
-                         *//*   new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    GotoImagePicker(bitmap);
-                                }
-                            }, 1000);*//*
-                        }
-                        break;
-                }*/
                 break;
             case TAKE_PHOTO_CODE:
                 switch (resultCode) {
@@ -1324,6 +1298,14 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
     private void GotoImagePicker(Bitmap selectedImage) {
         System.out.println("-- uRI  :2 " + selectedImage);
         Bitmap bitmapresize = Constant.getResizeOfBitmap(selectedImage, Constant.IMAGE_MAX_WIDTH, Constant.IMAGE_MAX_HEIGHT);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmapresize.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        ImageBytes = byteArray;
+        ImageOrientionCode = 1;
+        if (noteActionCode == 1) {
+            isNoteEdited = true;
+        }
         System.out.println("-- uRI  :3 " + selectedImage);
         Glide.with(context).load(bitmapresize).apply(RequestOptions.bitmapTransform(new RoundedCorners(24))).into(IvAttach);
         RlAttachViewer.setVisibility(View.VISIBLE);
