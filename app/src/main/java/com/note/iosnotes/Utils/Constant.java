@@ -53,6 +53,7 @@ public class Constant {
     public static String TAG_WIDGET_NOTE_ID = "WIDGET_NOTE_ID";
     public static String TAG_WIDGET_NOTE_CONTENT = "WIDGET_NOTE_CONTENT";
     public static String WIDGET_TEXT_COLOR = "WIDGET_TEXT_COLOR";
+    public static int Widget_Id = -1;
 
     public static String getTime(Date date) {
         long Millis = Calendar.getInstance().getTimeInMillis() - date.getTime();

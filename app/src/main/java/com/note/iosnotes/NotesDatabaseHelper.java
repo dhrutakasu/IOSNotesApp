@@ -1179,6 +1179,7 @@ public class NotesDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(NOTES_TEXT_CONTENT_UNDERLINE, note.isContentUnderline());
         contentValues.put(NOTES_TEXT_CONTENT_STRIKE, note.isContentStrike());
         contentValues.put(NOTES_TEXT_ALIGN, note.getAlign());
+        System.out.println("----- UPDATE : " + note.toString());
         db.update(NOTES_TABLE_NAME, contentValues, NOTES_ID + " = ?", new String[]{String.valueOf(note.getId())});
         return true;
     }
@@ -1313,18 +1314,20 @@ public class NotesDatabaseHelper extends SQLiteOpenHelper {
 
     public boolean checkRecordExist(String columnName, String columnValue) {
         SQLiteDatabase objDatabase;
-        try {
-            objDatabase = getReadableDatabase();
-            Cursor cursor = objDatabase.rawQuery("SELECT * FROM " + NOTES_TABLE_NAME + " WHERE " + columnName + "=? " + columnValue + "=? ", null);
-            if (cursor.moveToFirst()) {
-                Log.d("Record  Already Exists", "Table is:" + NOTES_TABLE_NAME + " ColumnName:" + columnName);
-                return true;
-
-            }
-            Log.d("New Record  ", "Table is:" + NOTES_TABLE_NAME + " ColumnName:" + columnName + " Column Value:" + columnValue);
-        } catch (Exception errorException) {
-            Log.d("Exception occured", "Exception occured " + errorException);
+        objDatabase = getReadableDatabase();
+        Cursor cursor;
+        if (!columnName.isEmpty() && !columnValue.isEmpty()) {
+            cursor = objDatabase.rawQuery("SELECT * FROM " + NOTES_TABLE_NAME + " WHERE " + NOTE_TITLE + "=? AND " + NOTES_CONTENT + "=? ", new String[]{columnName, columnValue});
+        } else if (!columnName.isEmpty()) {
+            cursor = objDatabase.rawQuery("SELECT * FROM " + NOTES_TABLE_NAME + " WHERE " + NOTE_TITLE + "=? ", new String[]{columnName});
+        } else {
+            cursor = objDatabase.rawQuery("SELECT * FROM " + NOTES_TABLE_NAME + " WHERE " + NOTES_CONTENT + "=? ", new String[]{columnValue});
         }
+        if (cursor.moveToFirst()) {
+            Log.d("Record  Already Exists", "Table is:" + NOTES_TABLE_NAME + " ColumnName:" + columnName);
+            return true;
+        }
+        Log.d("New Record  ", "Table is:" + NOTES_TABLE_NAME + " ColumnName:" + columnName + " Column Value:" + columnValue);
         return false;
     }
 }

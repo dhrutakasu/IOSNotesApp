@@ -4,6 +4,7 @@ package com.note.iosnotes.provider;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.widget.Toast;
 
 import com.note.iosnotes.Model.Note;
@@ -17,8 +18,10 @@ public class NoteWidgetCreatedReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         int i;
-        if ((i = intent.getIntExtra("appWidgetId",-1)) > 0) {
+        System.out.println("----------- "+Constant.Widget_Id);
+        if ((i = Constant.Widget_Id) > 0) {
             NotesDatabaseHelper helper=new NotesDatabaseHelper(context);
+            System.out.println("----------- ID "+intent.getIntExtra(Constant.TAG_WIDGET_NOTE_ID, 0));
             Note notes = helper.getNoteRecord(intent.getIntExtra(Constant.TAG_WIDGET_NOTE_ID, 0));
             notes.setCreateWidgetId(i);
             helper.updateNotes(notes);

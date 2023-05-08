@@ -3,8 +3,20 @@ package com.note.iosnotes.provider;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
+import android.text.Html;
+import android.text.Layout;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.AlignmentSpan;
+import android.text.style.StrikethroughSpan;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import com.note.iosnotes.Model.Note;
 import com.note.iosnotes.NotesDatabaseHelper;
@@ -77,23 +89,72 @@ public class NoteRemoteView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int i) {
+        Note note = helper.getNoteRecord((int) NoteId);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_main_view);
         views.removeAllViews(R.id.ll_note_widget_main);
+
+
         RemoteViews TitleViews = new RemoteViews(context.getPackageName(), R.layout.widget_title_view);
         if (NoteTitle.equals("")) {
             NoteTitle = context.getResources().getString(R.string.untitled);
         }
-        TitleViews.setTextViewText(R.id.tv_note_widget_title, NoteTitle);
+        SpannableString spanString = new SpannableString(NoteTitle);
+        if (note.isTitleBold()) {
+            spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
+        }
+        if (note.isTitleItalic()) {
+            spanString.setSpan(new StyleSpan(Typeface.ITALIC), 0, spanString.length(), 0);
+        }
+        if (note.isTitleUnderline()) {
+            spanString.setSpan(new UnderlineSpan(), 0, spanString.length(), 0);
+        }
+        if (note.isTitleStrike()) {
+            spanString.setSpan(new StrikethroughSpan(), 0, spanString.length(), 0);
+        }
+        if (note.getAlign()==1){
+            spanString.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_NORMAL), 0, spanString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }else if (note.getAlign()==2){
+            spanString.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, spanString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }else if (note.getAlign()==3){
+            spanString.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_OPPOSITE), 0, spanString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        TitleViews.setTextViewText(R.id.tv_note_widget_title, spanString);
         if (TextColor != -1) {
             TitleViews.setTextColor(R.id.tv_note_widget_title, context.getResources().getColor(TextColor));
         }
         views.addView(R.id.ll_note_widget_main, TitleViews);
+
+
+
         RemoteViews contentViews = new RemoteViews(context.getPackageName(), R.layout.widget_content_view);
-        contentViews.setTextViewText(R.id.tv_note_widget_content, StrNoteContent);
+        SpannableString contentString = new SpannableString(StrNoteContent);
+        if (note.isContentBold()) {
+            contentString.setSpan(new StyleSpan(Typeface.BOLD), 0, contentString.length(), 0);
+        }
+        if (note.isContentItalic()) {
+            contentString.setSpan(new StyleSpan(Typeface.ITALIC), 0, contentString.length(), 0);
+        }
+        if (note.isContentUnderline()) {
+            contentString.setSpan(new UnderlineSpan(), 0, contentString.length(), 0);
+        }
+        if (note.isContentStrike()) {
+            contentString.setSpan(new StrikethroughSpan(), 0, contentString.length(), 0);
+        }
+        if (note.getAlign()==1){
+            contentString.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_NORMAL), 0, contentString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }else if (note.getAlign()==2){
+            contentString.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, contentString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }else if (note.getAlign()==3){
+            contentString.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_OPPOSITE), 0, contentString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        contentViews.setTextViewText(R.id.tv_note_widget_content, contentString);
         if (TextColor != -1) {
             contentViews.setTextColor(R.id.tv_note_widget_content, context.getResources().getColor(TextColor));
         }
         views.addView(R.id.ll_note_widget_main, contentViews);
+
+
+
         Bitmap bitmap = Constant.getBitmapOfRotate(bytes, imgOrientionCode);
         if (bitmap != null) {
             RemoteViews ImageViews = new RemoteViews(context.getPackageName(), R.layout.widget_image_view);
