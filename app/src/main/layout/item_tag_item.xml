@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="55dp">
+
+    <FrameLayout
+        android:id="@+id/FlTagMain"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true">
+
+        <LinearLayout
+            android:id="@+id/LlTagMore"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical|center_horizontal|center|end"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/IvMore"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:padding="6dp"
+                android:src="@drawable/ic_more" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/RlTagLastGrp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/IvArrowRight"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/_6sdp"
+                android:src="@drawable/ic_right_arrow" />
+
+            <TextView
+                android:id="@+id/TvTagNumberNotes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/IvArrowRight"
+                android:text="2"
+                android:textColor="@color/app_text_subtitle_color"
+                android:textSize="15sp" />
+        </RelativeLayout>
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/IvTagColorIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:src="@drawable/md_red_500" />
+
+    <TextView
+        android:id="@+id/TvTagName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="4dp"
+        android:layout_toStartOf="@+id/FlTagMain"
+        android:layout_toEndOf="@+id/IvTagColorIcon"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        android:textColor="@color/app_text_title_color"
+        android:textSize="@dimen/_16ssp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="58dp"
+        android:background="@color/line_separate_color" />
+
+    <View
+        android:id="@+id/ViewDisableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99f3f3f3" />
+</RelativeLayout>

@@ -2,17 +2,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.note.iosnotes">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
         android:name=".Application.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:largeHeap="true"
-        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.IOSNotes"
-        android:usesCleartextTraffic="true">
+        android:theme="@style/Theme.IOSNotes">
         <activity
             android:name=".ui.Activity.NewCreateNotesActivity"
             android:launchMode="singleInstance"
@@ -73,16 +80,4 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
     </application>
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.BATTERY_STATS" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
-    <uses-permission android:name="android.permission.CAMERA" />
 </manifest>

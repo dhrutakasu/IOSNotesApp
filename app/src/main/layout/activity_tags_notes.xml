@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_color_bag">
+
+    <LinearLayout
+        android:id="@+id/LlHomeTagTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/RlHomeActionBarNotesList"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/TvNotesTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:text="Notes"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LlInfoNotesDeletedRetain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/LlHomeTagTitle"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_keep_note_delete_info"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="@string/keep_note_delete_info"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LlNoNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="5dp"
+            android:src="@drawable/ic_create" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/click"
+            android:textColor="@color/ios_sys_second_label"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/create_new_note"
+            android:textColor="@color/ios_sys_second_label"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/RlHomeActionBarNotesList"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <ImageView
+            android:id="@+id/IvBackNotesList"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="2dp"
+            android:foreground="?attr/actionBarItemBackground"
+            android:padding="10dp"
+            android:src="@drawable/ic_arrow" />
+
+        <RelativeLayout
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true">
+
+            <ImageView
+                android:id="@+id/IvActionOnNotesList"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="12dp"
+                android:foreground="?attr/actionBarItemBackground"
+                android:padding="6dp"
+                android:src="@drawable/ic_more"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/TvDoneEditedNotesList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/bg_text_button_home"
+                android:fontFamily="sans-serif-medium"
+                android:padding="8dp"
+                android:text="@string/done"
+                android:textColor="@color/app_icon_color"
+                android:textSize="@dimen/_16ssp"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/LlBottomActionNotesList"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="4dp">
+
+        <ImageView
+            android:id="@+id/IvActionCreateNote"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_create"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/IvActionSort"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_sort"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/TvNumNotesList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="sans-serif"
+            android:text="0 Notes"
+            android:textColor="@color/ios_sys_second_label"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/TvActionDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_text_button_home"
+            android:fontFamily="sans-serif-medium"
+            android:padding="8dp"
+            android:text="@string/action_delete"
+            android:textColor="@color/app_icon_color"
+            android:textSize="@dimen/_16ssp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/TvActionMove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/bg_text_button_home"
+            android:fontFamily="sans-serif-medium"
+            android:padding="8dp"
+            android:text="@string/action_move"
+            android:textColor="@color/app_icon_color"
+            android:textSize="@dimen/_16ssp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/SearchNotes"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:layout_below="@+id/LlInfoNotesDeletedRetain"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:layout_marginBottom="2dp"
+        android:background="@drawable/bg_searchview_rounded"
+        app:iconifiedByDefault="false"
+        app:queryBackground="@android:color/transparent"
+        app:queryHint="Search" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/LlBottomActionNotesList"
+        android:layout_below="@+id/SearchNotes"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/TvPinnedNotesTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:text="Notes"
+                android:textColor="@color/black"
+                android:textSize="22sp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/RvPinnedNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="@dimen/_16sdp" />
+
+            <TextView
+                android:id="@+id/TvNoteTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:text="Notes"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/RvNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="@dimen/_16sdp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>
