@@ -701,92 +701,90 @@ public class NotesDatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<Note> getSearchData(String title, String content, int folderId, int isDelete, int isPinEd) {
         ArrayList<Note> tagsArrayList = new ArrayList<>();
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM " + NOTES_TABLE_NAME + " WHERE " + NOTES_TAGS_ID + "=? AND " + NOTES_ISDELETE + "=? AND " + NOTES_ISPIN + "=?", new String[]{String.valueOf(folderId), String.valueOf(isDelete), String.valueOf(isPinEd)});
+        Cursor cursor = database.rawQuery("SELECT * FROM " + NOTES_TABLE_NAME + " WHERE " + NOTE_TITLE + " LIKE ? AND " + NOTES_CONTENT + " LIKE ? AND " + NOTES_TAGS_ID + "=? AND " + NOTES_ISDELETE + "=? AND " + NOTES_ISPIN + "=? ", new String[]{String.valueOf("%" + title + "%"), String.valueOf("%" + content + "%"), String.valueOf(folderId), String.valueOf(isDelete), String.valueOf(isPinEd)});
         cursor.moveToFirst();
         if (cursor.moveToFirst()) {
             do {
-                if (title.contains(cursor.getString(cursor.getColumnIndex(NOTE_TITLE))) || content.contains(cursor.getString(cursor.getColumnIndex(NOTES_CONTENT)))) {
-                    boolean isLock, isDeleted, isPin, IsTitleBold, IsTitleItalic, IsTitleUnderline, IsTitleStrike, IsContentBold, IsContentItalic, IsContentUnderline, IsContentStrike;
-                    if (cursor.getInt(cursor.getColumnIndex(NOTES_ISLOCK)) == 0) {
-                        isLock = false;
-                    } else {
-                        isLock = true;
-                    }
-                    if (cursor.getInt(cursor.getColumnIndex(NOTES_ISDELETE)) == 0) {
-                        isDeleted = false;
-                    } else {
-                        isDeleted = true;
-                    }
-                    if (cursor.getInt(cursor.getColumnIndex(NOTES_ISPIN)) == 0) {
-                        isPin = false;
-                    } else {
-                        isPin = true;
-                    }
-                    if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_TITLE_BOLD)) == 0) {
-                        IsTitleBold = false;
-                    } else {
-                        IsTitleBold = true;
-                    }
-                    if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_TITLE_ITALIC)) == 0) {
-                        IsTitleItalic = false;
-                    } else {
-                        IsTitleItalic = true;
-                    }
-                    if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_TITLE_UNDERLINE)) == 0) {
-                        IsTitleUnderline = false;
-                    } else {
-                        IsTitleUnderline = true;
-                    }
-                    if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_TITLE_STRIKE)) == 0) {
-                        IsTitleStrike = false;
-                    } else {
-                        IsTitleStrike = true;
-                    }
-                    if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_CONTENT_BOLD)) == 0) {
-                        IsContentBold = false;
-                    } else {
-                        IsContentBold = true;
-                    }
-                    if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_CONTENT_ITALIC)) == 0) {
-                        IsContentItalic = false;
-                    } else {
-                        IsContentItalic = true;
-                    }
-                    if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_CONTENT_UNDERLINE)) == 0) {
-                        IsContentUnderline = false;
-                    } else {
-                        IsContentUnderline = true;
-                    }
-                    if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_CONTENT_STRIKE)) == 0) {
-                        IsContentStrike = false;
-                    } else {
-                        IsContentStrike = true;
-                    }
-
-                    @SuppressLint("Range") Note user = new Note(cursor.getInt(cursor.getColumnIndex(NOTES_ID))
-                            , cursor.getInt(cursor.getColumnIndex(NOTES_TAGS_ID))
-                            , cursor.getString(cursor.getColumnIndex(NOTE_TITLE))
-                            , cursor.getString(cursor.getColumnIndex(NOTES_CONTENT))
-                            , new Date(cursor.getLong(cursor.getColumnIndex(NOTES_TIME)))
-                            , cursor.getBlob(cursor.getColumnIndex(NOTES_IMAGE))
-                            , isDeleted
-                            , isLock
-                            , isPin
-                            , cursor.getInt(cursor.getColumnIndex(NOTES_WIDGET))
-                            , cursor.getInt(cursor.getColumnIndex(NOTES_FOLDERID))
-                            , cursor.getInt(cursor.getColumnIndex(NOTES_PIN_ORDER))
-                            , cursor.getInt(cursor.getColumnIndex(NOTES_IMAGE_ORIENT_CODE))
-                            , IsTitleBold
-                            , IsTitleItalic
-                            , IsTitleUnderline
-                            , IsTitleStrike
-                            , IsContentBold
-                            , IsContentItalic
-                            , IsContentUnderline
-                            , IsContentStrike
-                            , cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_ALIGN)));
-                    tagsArrayList.add(user);
+                boolean isLock, isDeleted, isPin, IsTitleBold, IsTitleItalic, IsTitleUnderline, IsTitleStrike, IsContentBold, IsContentItalic, IsContentUnderline, IsContentStrike;
+                if (cursor.getInt(cursor.getColumnIndex(NOTES_ISLOCK)) == 0) {
+                    isLock = false;
+                } else {
+                    isLock = true;
                 }
+                if (cursor.getInt(cursor.getColumnIndex(NOTES_ISDELETE)) == 0) {
+                    isDeleted = false;
+                } else {
+                    isDeleted = true;
+                }
+                if (cursor.getInt(cursor.getColumnIndex(NOTES_ISPIN)) == 0) {
+                    isPin = false;
+                } else {
+                    isPin = true;
+                }
+                if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_TITLE_BOLD)) == 0) {
+                    IsTitleBold = false;
+                } else {
+                    IsTitleBold = true;
+                }
+                if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_TITLE_ITALIC)) == 0) {
+                    IsTitleItalic = false;
+                } else {
+                    IsTitleItalic = true;
+                }
+                if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_TITLE_UNDERLINE)) == 0) {
+                    IsTitleUnderline = false;
+                } else {
+                    IsTitleUnderline = true;
+                }
+                if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_TITLE_STRIKE)) == 0) {
+                    IsTitleStrike = false;
+                } else {
+                    IsTitleStrike = true;
+                }
+                if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_CONTENT_BOLD)) == 0) {
+                    IsContentBold = false;
+                } else {
+                    IsContentBold = true;
+                }
+                if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_CONTENT_ITALIC)) == 0) {
+                    IsContentItalic = false;
+                } else {
+                    IsContentItalic = true;
+                }
+                if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_CONTENT_UNDERLINE)) == 0) {
+                    IsContentUnderline = false;
+                } else {
+                    IsContentUnderline = true;
+                }
+                if (cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_CONTENT_STRIKE)) == 0) {
+                    IsContentStrike = false;
+                } else {
+                    IsContentStrike = true;
+                }
+
+                @SuppressLint("Range") Note user = new Note(cursor.getInt(cursor.getColumnIndex(NOTES_ID))
+                        , cursor.getInt(cursor.getColumnIndex(NOTES_TAGS_ID))
+                        , cursor.getString(cursor.getColumnIndex(NOTE_TITLE))
+                        , cursor.getString(cursor.getColumnIndex(NOTES_CONTENT))
+                        , new Date(cursor.getLong(cursor.getColumnIndex(NOTES_TIME)))
+                        , cursor.getBlob(cursor.getColumnIndex(NOTES_IMAGE))
+                        , isDeleted
+                        , isLock
+                        , isPin
+                        , cursor.getInt(cursor.getColumnIndex(NOTES_WIDGET))
+                        , cursor.getInt(cursor.getColumnIndex(NOTES_FOLDERID))
+                        , cursor.getInt(cursor.getColumnIndex(NOTES_PIN_ORDER))
+                        , cursor.getInt(cursor.getColumnIndex(NOTES_IMAGE_ORIENT_CODE))
+                        , IsTitleBold
+                        , IsTitleItalic
+                        , IsTitleUnderline
+                        , IsTitleStrike
+                        , IsContentBold
+                        , IsContentItalic
+                        , IsContentUnderline
+                        , IsContentStrike
+                        , cursor.getInt(cursor.getColumnIndex(NOTES_TEXT_ALIGN)));
+                tagsArrayList.add(user);
             } while (cursor.moveToNext());
         }
         return tagsArrayList;

@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -76,7 +77,7 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
     private String isSort = "";
     private boolean isTime = true;
     private String isType;
-//    private SearchView SearchNotes;
+    private SearchView SearchNotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +106,7 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
         TvDoneEditedNotesList = (TextView) findViewById(R.id.TvDoneEditedNotesList);
         TvActionMove = (TextView) findViewById(R.id.TvActionMove);
         TvActionDelete = (TextView) findViewById(R.id.TvActionDelete);
-//        SearchNotes = findViewById(R.id.SearchNotes);
+        SearchNotes = findViewById(R.id.SearchNotes);
     }
 
     private void getIntents() {
@@ -123,50 +124,51 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
         TvActionMove.setOnClickListener(this);
         TvActionDelete.setOnClickListener(this);
         IvActionSort.setOnClickListener(this);
-//        SearchNotes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            public boolean onQueryTextSubmit(String str) {
-//                return false;
-//            }
-//
-//            public boolean onQueryTextChange(String str) {
-//                if (str.equals("") || str.isEmpty()) {
-//                    getListNoteInFolder();
-//                } else {
-//                    if (tagId != 1) {
-//                        NotesList = helper.getSearchData(str, str, tagId, 0, 0);
-//
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                            Collections.sort(NotesList, Comparator.comparing(Note::getDateTimeMills).reversed()
-//                                    .thenComparing(Note::getIntPinOrder).reversed());
-//                        }
-//                    } else {
-//                        NotesList = helper.getSearchIsDelete(str,1);
-//
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                            Collections.sort(NotesList, Comparator.comparing(Note::getDateTimeMills).reversed());
-//                        }
-//                    }
-//                    PinnedNotesList = helper.getSearchIsPin(str,1, tagId);
-//                    if (PinnedNotesList.size() > 0) {
-//                        TvPinnedNotesTitle.setVisibility(View.VISIBLE);
-//                        RvPinnedNotes.setVisibility(View.VISIBLE);
-//                    } else {
-//                        TvPinnedNotesTitle.setVisibility(View.GONE);
-//                        RvPinnedNotes.setVisibility(View.GONE);
-//                    }
-//                    if (NotesList.size() > 0) {
-//                        TvNoteTitle.setVisibility(View.VISIBLE);
-//                        RvNotes.setVisibility(View.VISIBLE);
-//                    } else {
-//                        TvNoteTitle.setVisibility(View.GONE);
-//                        RvNotes.setVisibility(View.GONE);
-//                    }
-//                }
-//                pinnotesAdapter.updateData(PinnedNotesList);
-//                notesAdapter.updateData(NotesList);
-//                return false;
-//            }
-//        });
+        SearchNotes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            public boolean onQueryTextSubmit(String str) {
+                return false;
+            }
+
+            public boolean onQueryTextChange(String str) {
+                if (str.equals("") || str.isEmpty()) {
+                    getListNoteInFolder();
+                } else {
+                    if (tagId != 1) {
+                        PinnedNotesList = helper.getSearchData(str, str, tagId, 0, 1);
+                        NotesList = helper.getSearchData(str, str, tagId, 0, 0);
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            Collections.sort(NotesList, Comparator.comparing(Note::getDateTimeMills).reversed()
+                                    .thenComparing(Note::getIntPinOrder).reversed());
+                        }
+                    } else {
+                        NotesList = helper.getSearchIsDelete(str,1);
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            Collections.sort(NotesList, Comparator.comparing(Note::getDateTimeMills).reversed());
+                        }
+                    }
+                    PinnedNotesList = helper.getSearchIsPin(str,1, tagId);
+                    if (PinnedNotesList.size() > 0) {
+                        TvPinnedNotesTitle.setVisibility(View.VISIBLE);
+                        RvPinnedNotes.setVisibility(View.VISIBLE);
+                    } else {
+                        TvPinnedNotesTitle.setVisibility(View.GONE);
+                        RvPinnedNotes.setVisibility(View.GONE);
+                    }
+                    if (NotesList.size() > 0) {
+                        TvNoteTitle.setVisibility(View.VISIBLE);
+                        RvNotes.setVisibility(View.VISIBLE);
+                    } else {
+                        TvNoteTitle.setVisibility(View.GONE);
+                        RvNotes.setVisibility(View.GONE);
+                    }
+                }
+                pinnotesAdapter.updateData(PinnedNotesList);
+                notesAdapter.updateData(NotesList);
+                return false;
+            }
+        });
     }
 
     private void initActions() {
@@ -204,7 +206,7 @@ public class TagsNotesActivity extends AppCompatActivity implements View.OnClick
                     System.out.println("------ size  : " + PinnedNotesList.size());
                     if (itemId == 1) {
                         showDialogRecoveryNote();
-                    } else if (mPassword == null || mPassword.equals("") || !((Note) NotesList.get(i)).isLockedOrNot()) {
+                    } else if (mPassword == null || mPassword.equals("") || !((Note) PinnedNotesList.get(i)).isLockedOrNot()) {
                         System.out.println("------ IDdd : " + (PinnedNotesList.get(mNoteSelectedPos)).toString());
                         openNote(true);
                     } else {

@@ -52,6 +52,14 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.BaseRequestOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.divyanshu.draw.activity.DrawingActivity;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.ligl.android.widget.iosdialog.IOSSheetDialog;
 import com.note.iosnotes.Model.Note;
 import com.note.iosnotes.Model.Tags;
@@ -616,6 +624,7 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
                     } else {
                         ids = (int) NoteId;
                     }
+                    System.out.println("-------- WIDGET-ID: " + ids);
                     Intent intent = new Intent(context, NoteWidgetCreatedReceiver.class);
                     intent.putExtra(Constant.TAG_WIDGET_NOTE_TITLE, title);
                     intent.putExtra(Constant.TAG_WIDGET_NOTE_CONTENT, content);
@@ -853,7 +862,7 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
                         }
                         noteHelper.updateTags(new Tags(tags.getId(), tags.getTagName(), tags.getColorCodeId(), (tags.getCounterNote() + 1)));
                     }
-                },500);
+                }, 500);
             }
 
             public void onScanNote() {
@@ -1139,30 +1148,63 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
     }
 
     private void showDialogAttachImage() {
-        if (checkAndRequestPermissions(NewCreateNotesActivity.this)) {
-            new IOSSheetDialog.Builder(context).setTitle((CharSequence) getResources().getString(R.string.choose_action)).setCancelText((CharSequence) getResources().getString(R.string.cancel)).setData(new IOSSheetDialog.SheetItem[]{new IOSSheetDialog.SheetItem(getResources().getString(R.string.take_photo), IOSSheetDialog.SheetItem.BLUE), new IOSSheetDialog.SheetItem(getResources().getString(R.string.choose_photo), IOSSheetDialog.SheetItem.BLUE)}, (DialogInterface.OnClickListener) new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                    if (i == 0) {
-                        imageAction = IMAGE_ACTION.CLICK_PHOTO;
-//                        actionTakePhoto();
-                        takePhoto();
-                    } else if (i == 1) {
-                        imageAction = IMAGE_ACTION.CHOOSE_GALLERY_PHOTO;
-//                        actionPickPhoto();
-                        selectImage();
-                    }
-                }
-            }).create().show();
+        String s;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            s = Manifest.permission.READ_MEDIA_IMAGES;
+        } else {
+            s = Manifest.permission.WRITE_EXTERNAL_STORAGE;
         }
+        String s2 = Manifest.permission.CAMERA;
+        Dexter.withContext(context)
+                .withPermissions(s, s2)
+                .withListener(new MultiplePermissionsListener() {
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        System.out.println("===== report grant --- "+report.areAllPermissionsGranted());
+                        System.out.println("===== report denied --- "+report.isAnyPermissionPermanentlyDenied());
+                        if (report.areAllPermissionsGranted()) {
+                            new IOSSheetDialog.Builder(context).setTitle((CharSequence)
+                                    getResources().getString(R.string.choose_action))
+                                    .setCancelText((CharSequence) getResources().getString(R.string.cancel))
+                                    .setData(new IOSSheetDialog.SheetItem[]
+                                            {new IOSSheetDialog.SheetItem(getResources().getString(R.string.take_photo)
+                                                    , IOSSheetDialog.SheetItem.BLUE),
+                                                    new IOSSheetDialog.SheetItem(getResources().getString(R.string.choose_photo)
+                                                            , IOSSheetDialog.SheetItem.BLUE)}, (DialogInterface.OnClickListener)
+                                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    if (i == 0) {
+                                        imageAction = IMAGE_ACTION.CLICK_PHOTO;
+//                        actionTakePhoto();
+                                        takePhoto();
+                                    } else if (i == 1) {
+                                        imageAction = IMAGE_ACTION.CHOOSE_GALLERY_PHOTO;
+//                        actionPickPhoto();
+                                        selectImage();
+                                    }
+                                }
+                            }).show();
+                        }
+
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            Constant.showSettingsDialog(NewCreateNotesActivity.this);
+                        }
+                    }
+
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken permissionToken) {
+                        Constant.showPermissionDialog(NewCreateNotesActivity.this, permissionToken);
+                    }
+                })
+                .onSameThread()
+                .check();
     }
 
     private void GotoEdit() {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInputFromWindow(EdtCreateNoteTitle.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
     }
-
-    public static boolean checkAndRequestPermissions(final Activity context) {
+/*
+    public boolean checkAndRequestPermissions(final Activity context) {
         int WExtstorePermission;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             WExtstorePermission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES);
@@ -1173,6 +1215,8 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
         List<String> listPermissionsNeeded = new ArrayList<>();
         if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.CAMERA);
+        } else {
+            showDialogAttachImage();
         }
         if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -1180,6 +1224,8 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
             } else {
                 listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
+        } else {
+            showDialogAttachImage();
         }
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(context, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
@@ -1191,23 +1237,32 @@ public class NewCreateNotesActivity extends AppCompatActivity implements View.On
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        System.out.println("====== grant ---- " + grantResults.toString());
+
         switch (requestCode) {
             case REQUEST_ID_MULTIPLE_PERMISSIONS:
                 if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    System.out.println("====== else if---- ");
+                    showDialogAttachImage();
 //                    Toast.makeText(getApplicationContext(), "Requires Access to Camera.", Toast.LENGTH_SHORT).show();
                 } else if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                    System.out.println("====== else iff---- ");
+                    showDialogAttachImage();
 //                    Toast.makeText(getApplicationContext(), "Requires Access to Your Storage.", Toast.LENGTH_SHORT).show();
                 } else if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    System.out.println("====== else ifff---- ");
+                    showDialogAttachImage();
 //                    Toast.makeText(getApplicationContext(), "Requires Access to Your Storage.", Toast.LENGTH_SHORT).show();
                 } else {
+                    System.out.println("====== else ---- ");
                     showDialogAttachImage();
                 }
                 break;
         }
-    }
+    }*/
 
     private void takePhoto() {
-        Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePicture, TAKE_PHOTO_CODE);
     }
 

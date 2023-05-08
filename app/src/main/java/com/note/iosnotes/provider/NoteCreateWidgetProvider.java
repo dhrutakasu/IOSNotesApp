@@ -15,14 +15,16 @@ import com.note.iosnotes.ui.Activity.NewCreateNotesActivity;
 public class NoteCreateWidgetProvider extends AppWidgetProvider {
     private NotesDatabaseHelper helper;
 
+    @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] iArr) {
         System.out.println("----------- uuid_length " + iArr.length);
         for (int id : iArr) {
-            Constant.Widget_Id=id;
+            Constant.Widget_Id = id;
             System.out.println("----------- uuid " + id);
         }
     }
 
+    @Override
     public void onDeleted(Context context, int[] iArr) {
         helper = new NotesDatabaseHelper(context);
         for (int valueof : iArr) {
@@ -37,6 +39,7 @@ public class NoteCreateWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-
+//
+//        Constant.Widget_Id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
     }
 }
