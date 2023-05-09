@@ -214,7 +214,7 @@ public class NotesDatabaseHelper extends SQLiteOpenHelper {
         long count = DatabaseUtils.queryNumEntries(db, NOTES_TABLE_NAME);
         return count;
     }
-
+/*
     //todo IsPin count for tags table
     @SuppressLint("Range")
     public ArrayList<Note> getIsPin(int i1, int id) {
@@ -306,7 +306,7 @@ public class NotesDatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         return tagsArrayList;
-    }
+    }*/
 
     //todo IsPin count for tags table
     @SuppressLint("Range")
@@ -417,10 +417,10 @@ public class NotesDatabaseHelper extends SQLiteOpenHelper {
 
     //todo get deleted false record of tags
     @SuppressLint("Range")
-    public ArrayList<Note> getIsDelete(int isDelete) {
+    public ArrayList<Note> getIsDelete(int isDelete,int isPined) {
         ArrayList<Note> tagsArrayList = new ArrayList<>();
         SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM " + NOTES_TABLE_NAME + " WHERE " + NOTES_ISDELETE + "=? ", new String[]{String.valueOf(isDelete)});
+        Cursor cursor = database.rawQuery("SELECT * FROM " + NOTES_TABLE_NAME + " WHERE " + NOTES_ISDELETE + "=? AND "+NOTES_ISPIN+"=? ", new String[]{String.valueOf(isDelete),String.valueOf(isPined)});
         cursor.moveToFirst();
         if (cursor.moveToFirst()) {
             do {
